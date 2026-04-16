@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./recursos/css/index.css">
+    <link rel="icon" href="./recursos/imagenes/logo balsamoa.webp" type="image/webp">
+    <script type="module" src="./recursos/js/menu.js"></script>
+    <title>Balsamoa | Nosotros</title>
+</head>
+
+<body>
+    <header class="encabezadoPrincipal">
+        <div class="contenidoEncPag">
+            <a href="./index.html">
+                <img src="./recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa">
+            </a>
+
+            <!-- Boton menu de celular -->
+            <button class="menuBtn" id="id_menuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav id="id_menuNav">
+                <ul>
+                    <li><a href="./index.html">Inicio</a></li>
+                    <li><a href="./productos.html">Productos</a></li>
+                    <li><a href="./nosotros.html">Nosotros</a></li>
+                    <li><a href="./contacto.html">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Fondo para boton menu de celular -->
+    <div class="menuOverlay" id="id_menuOverlay"></div>
+
+    <main>
+        <section class="nosotros">
+            <picture>
+                <source media="(max-width: 768px)" srcset="./recursos/imagenes/nosotrosCelular.webp">
+                <img src="./recursos/imagenes/nosotros.webp" alt="Imagen Balsamoa Nosotros">
+            </picture>
+
+            <div class="nosotrosContenido">
+                <p><strong>Nosotros</strong></p>
+                
+                <p>Balsamoa nació del sueño de dos amigos que buscaban transformar sus ideas y emociones en prendas
+                    únicas y con alma. No empezamos como una simple marca de ropa, sino como una forma de expresar
+                    quiénes somos y de dónde venimos.</p>
+
+                <p>Nuestras raíces, paisajes, costumbres y encuentros nos inspiran para crear piezas limitadas que
+                    transmiten identidad y cercanía. Cada prenda refleja lo que sentimos como argentinos y cordobeses:
+                    la calidez de lo familiar, los colores de nuestras sierras y la fuerza de nuestra tierra.</p>
+
+                <p>Creemos en hacer las cosas con sentido. Por eso trabajamos con procesos responsables, materiales
+                    seleccionados con conciencia y una producción que cuida tanto a las personas como al entorno. Para
+                    nosotros, la sustentabilidad no es tendencia: es un compromiso.</p>
+
+                <p>Balsamoa es un proyecto en crecimiento, con aprendizajes, desafíos y muchas ganas de ofrecer ropa que
+                    no solo se vea bien, sino que también se sienta bien. Porque detrás de cada prenda hay valores,
+                    trabajo y pasión.</p>
+
+                <p>Esto es Balsamoa, Bienvenidos.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="piePagina">
+        <address class="contenidoPiePag">
+            <a href="https://www.instagram.com/balsamoa1/" target="_blank" class="instagram">
+                <img src="./recursos/imagenes/ig.svg" alt="Logo Instagram">@Balsamoa1
+            </a>
+            <span class="ubicacion">
+                <img src="./recursos/imagenes/ubi.svg" alt="Logo Ubicacion">Cordoba, Argentina
+            </span>
+            <a href="https://wa.me/+5491111111" target="_blank" class="whatsapp">
+                <img src="./recursos/imagenes/ws.svg" alt="Logo Whatsapp">WhatsApp
+            </a>
+        </address>
+    </footer>
+</body>
+
+</html>
