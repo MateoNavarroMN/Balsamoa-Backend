@@ -15,7 +15,7 @@ let productosVisibles = 0
 
 async function iniciarPagina() {
     try {
-        const respuesta = await fetch('./recursos/datos/bdProductos.json')
+        const respuesta = await fetch('https://69d676ce1c120e733cce4248.mockapi.io/productos-balsamoa')
         productos = await respuesta.json()
 
         productosFiltrados = [...productos]
