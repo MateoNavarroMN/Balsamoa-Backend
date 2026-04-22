@@ -5,7 +5,7 @@ const contenedorProdsDest = document.getElementById('id_contenedorProductosDesta
 
 async function cargarProductosDestacados() {
     try {
-        const respuesta = await fetch('./recursos/datos/bdProductos.json')
+        const respuesta = await fetch('https://69d676ce1c120e733cce4248.mockapi.io/productos-balsamoa')
         const productos = await respuesta.json()
 
         renderizarProdsDestacados(productos, [1, 2, 3], contenedorProdsDest)
