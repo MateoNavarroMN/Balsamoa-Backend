@@ -1,0 +1,194 @@
+/* ============================================================
+   BALSAMOA — Nosotros.CSS
+   Estilos exclusivos de nosotros.html
+   ============================================================ */
+
+/* ==============================
+   ENCABEZADO DE PÁGINA
+================================ */
+.paginaHeader {
+    background-color: var(--azul);
+    padding: 56px 40px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.paginaHeader::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 60%, rgba(196, 112, 58, 0.15) 0%, transparent 55%);
+    pointer-events: none;
+}
+
+.paginaHeader .seccionEtiqueta {
+    color: var(--terracota-claro);
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.paginaHeader h1 {
+    font-family: var(--fuente-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    color: var(--crema);
+    line-height: 1.1;
+    padding: 0;
+    text-align: center;
+    position: relative;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.nosotrosSeccion {
+    max-width: var(--max-ancho);
+    margin: 0 auto;
+    padding: 80px 40px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 80px;
+    align-items: start;
+}
+
+.nosotrosContenido {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.nosotrosHeroInterno {
+    margin-bottom: 20px;
+}
+
+.nosotrosTitle {
+    font-family: var(--fuente-display);
+    font-size: clamp(32px, 4.5vw, 54px);
+    color: var(--azul);
+    line-height: 1.1;
+    margin: 12px 0 20px;
+}
+
+.nosotrosTitle em {
+    font-style: italic;
+    color: var(--terracota);
+}
+
+.nosotrosLead {
+    font-size: 17px;
+    color: var(--gris);
+    line-height: 1.7;
+    max-width: 600px;
+}
+
+.nosotrosBloque h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--terracota);
+    margin-bottom: 12px;
+}
+
+.nosotrosBloque p {
+    font-size: 15.5px;
+    color: var(--negro);
+    line-height: 1.8;
+}
+
+.nosotrosCierre {
+    font-family: var(--fuente-display);
+    font-size: 20px;
+    font-style: italic;
+    color: var(--terracota);
+    margin-top: 10px;
+}
+
+.nosotrosFoto {
+    top: 100px;
+}
+
+.nosotrosFoto img {
+    width: 100%;
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-hover);
+    border: 1px solid var(--crema-oscuro);
+}
+
+.nosotrosValores {
+    background-color: var(--crema-oscuro);
+    padding: 80px 40px;
+}
+
+.valoresHeader {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.valoresGrid {
+    max-width: var(--max-ancho);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.valorCard {
+    background: var(--blanco);
+    border: 1px solid transparent;
+    border-radius: var(--radio-lg);
+    padding: 32px;
+    transition: all var(--transition);
+    box-shadow: var(--sombra);
+}
+
+.valorCard:hover {
+    border-color: var(--terracota);
+    transform: translateY(-5px);
+}
+
+.valorIcono {
+    width: 40px;
+    height: 40px;
+    background: rgba(196, 112, 58, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--terracota);
+    margin-bottom: 20px;
+}
+
+.nosotrosCtaFinal {
+    text-align: center;
+    padding: 80px 40px;
+}
+
+.nosotrosCtaFinal h2 {
+    font-family: var(--fuente-display);
+    font-size: 32px;
+    color: var(--azul);
+    margin-bottom: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .nosotrosSeccion {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px 24px;
+    }
+
+    .nosotrosFoto {
+        position: static;
+        order: -1;
+    }
+
+    .valoresGrid {
+        grid-template-columns: 1fr;
+    }
+}

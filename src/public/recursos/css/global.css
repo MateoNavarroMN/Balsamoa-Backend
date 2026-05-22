@@ -1,0 +1,556 @@
+/* ============================================================
+   BALSAMOA — Global.CSS
+   Variables, reset, header, footer, barra menú celular
+   Importado por todos los archivos HTML
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+/* ==============================
+   RESET & VARIABLES
+================================ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --azul: #2C4A5E;
+    --azul-oscuro: #1e3345;
+    --azul-claro: #3d607a;
+    --terracota: #C4703A;
+    --terracota-claro: #d4834e;
+    --crema: #F5F0E8;
+    --crema-oscuro: #E8E0CF;
+    --negro: #1A1A1A;
+    --gris: #6B6B6B;
+    --gris-claro: #A0A0A0;
+    --blanco: #FFFFFF;
+
+    --fuente-display: 'Playfair Display', Georgia, serif;
+    --fuente-cuerpo: 'DM Sans', system-ui, sans-serif;
+
+    --radio: 4px;
+    --radio-lg: 14px;
+    --sombra: 0 2px 16px rgba(44, 74, 94, 0.10);
+    --sombra-hover: 0 10px 36px rgba(44, 74, 94, 0.18);
+
+    --transition: 0.28s ease;
+
+    --max-ancho: 1280px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--crema);
+    color: var(--negro);
+    font-family: var(--fuente-cuerpo);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+}
+
+/* ==============================
+   BARRA DE ANUNCIO
+================================ */
+.anuncioBarra {
+    background-color: var(--azul);
+    color: var(--crema);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    padding: 9px 0;
+    overflow: hidden;
+    display: flex;
+    white-space: nowrap;
+}
+
+.anuncioBarra strong {
+    color: var(--terracota-claro);
+}
+
+.anuncioContenido {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding-right: 40px;
+    animation: deslizarAnuncio 25s linear infinite;
+    flex-shrink: 0;
+}
+
+/* Animación infinita */
+@keyframes deslizarAnuncio {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.anuncioBarra strong {
+    color: var(--terracota-claro);
+}
+
+/* ==============================
+   HEADER REDISEÑADO
+================================ */
+.encabezadoPrincipal {
+    width: 100%;
+    background-color: var(--crema);
+    border-bottom: 1px solid var(--crema-oscuro);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.contenidoEncPag {
+    max-width: var(--max-ancho);
+    margin: 0 auto;
+    padding: 5px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.headerTop {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.logoLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logoLink img {
+    width: 50px;
+    height: auto;
+}
+
+.logoTexto {
+    font-family: var(--fuente-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--azul);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+#id_menuNav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#id_menuNav a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--negro);
+    letter-spacing: 0.05em;
+    padding: 6px 6px;
+    transition: color var(--transition);
+}
+
+#id_menuNav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#id_menuNav a:hover {
+    color: var(--terracota);
+}
+
+/* ==============================
+   MENÚ HAMBURGUESA (mobile)
+================================ */
+.menuBtn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 102;
+    position: relative;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menuBtn span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--negro);
+    transition: var(--transition);
+    transform-origin: center;
+}
+
+.menuBtn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menuBtn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menuBtn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.menuOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(26, 26, 26, 0.35);
+    z-index: 98;
+    backdrop-filter: blur(2px);
+}
+
+.menuOverlay.active {
+    display: block;
+}
+
+/* ==============================
+   MAIN
+================================ */
+
+main {
+    flex: 1;
+}
+
+/* ==============================
+   FOOTER
+================================ */
+.piePagina {
+    width: 100%;
+    background: var(--azul);
+    border-top: 1px solid var(--azul-oscuro);
+    padding: 40px 24px;
+    flex-shrink: 0;
+}
+
+.footerDivider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--terracota) 50%, transparent 100%);
+    margin-bottom: 32px;
+    max-width: var(--max-ancho);
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 2px;
+    opacity: 0.6;
+}
+
+.contenidoPiePag {
+    max-width: var(--max-ancho);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    font-style: normal;
+    flex-wrap: wrap;
+}
+
+.footerBrand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.footerLogo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.footerNombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--crema);
+    letter-spacing: 0.05em;
+}
+
+.footerCopyright {
+    font-size: 12px;
+    color: var(--azul-claro);
+    margin-left: 4px;
+}
+
+.footerLinks {
+    display: flex;
+    gap: 24px;
+}
+
+.footerLinks a {
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--crema-oscuro);
+    transition: color var(--transition);
+}
+
+.footerLinks a:hover {
+    color: var(--terracota-claro);
+}
+
+.footerSociales {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.socialPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(245, 240, 232, 0.15);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 11px;
+    text-decoration: none;
+    color: var(--crema-oscuro);
+    transition: all var(--transition);
+}
+
+.socialPill img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.socialPill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--crema);
+    color: var(--blanco);
+    transform: translateY(-2px);
+}
+
+.socialPill.instagram:hover {
+    color: #ff85a1;
+    border-color: #ff85a1;
+}
+
+.socialPill.whatsapp:hover {
+    color: #25D366;
+    border-color: #25D366;
+}
+
+.socialPill.ubicacion:hover {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+/* ==============================
+   UTILIDADES COMPARTIDAS
+================================ */
+.seccionEtiqueta {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terracota);
+    margin-bottom: 8px;
+}
+
+.seccionEtiqueta.claro {
+    color: rgba(245, 240, 232, 0.6);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==============================
+   BOTÓN WHATSAPP FLOTANTE
+================================ */
+.whatsapp-flotante {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-flotante:hover {
+    transform: scale(1.1);
+    background-color: #128c7e;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.whatsapp-flotante img {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0) invert(1);
+}
+
+
+/* ==============================
+   RESPONSIVE GLOBAL
+================================ */
+@media (max-width: 900px) {
+    .footerContenido {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        padding: 52px 32px 40px;
+    }
+
+    .footerLogo {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .anuncioBarra {
+        font-size: 10.5px;
+        letter-spacing: 0.06em;
+    }
+
+    .contenidoEncPag {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+        padding: 0 20px;
+    }
+
+    .headerTop {
+        width: auto;
+    }
+
+    .logoLink {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .logoLink img {
+        width: 35px;
+    }
+
+    .logoTexto {
+        font-size: 16px;
+    }
+
+    .menuBtn {
+        display: flex;
+    }
+
+    #id_menuNav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 72%;
+        display: block;
+        max-width: 290px;
+        height: 100vh;
+        background-color: var(--crema);
+        padding-top: 88px;
+        transition: right 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 99;
+        box-shadow: -8px 0 32px rgba(44, 74, 94, 0.12);
+        border-left: 1px solid var(--crema-oscuro);
+        overflow-y: auto;
+    }
+
+    #id_menuNav.active {
+        right: 0;
+    }
+
+    #id_menuNav ul {
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+    }
+
+    #id_menuNav li {
+        border-bottom: 1px solid var(--crema-oscuro);
+    }
+
+    #id_menuNav a {
+        display: block;
+        padding: 17px 28px;
+        font-size: 17px;
+        border-radius: 0;
+    }
+
+    .contenidoPiePag {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+    }
+
+    .footerLinks,
+    .footerSociales,
+    .footerBrand {
+        justify-content: center;
+    }
+
+    .whatsapp-flotante {
+        width: 52px;
+        height: 52px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .whatsapp-flotante img {
+        width: 28px;
+        height: 28px;
+    }
+}

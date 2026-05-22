@@ -7,17 +7,17 @@ let imagenActual = 0
 
 function crearIndicadores() {
     let htmlIndicadores = ''
-    
+
     for (let i = 0; i < 3; i++) {
         const claseActivo = i === 0 ? 'activo' : ''
         htmlIndicadores += `<div class="indicador ${claseActivo}"></div>`
     }
-    
+
     contenedorIndicadores.insertAdjacentHTML('beforeend', htmlIndicadores)
 
     const indicadores = document.querySelectorAll('.indicador')
     indicadores.forEach((indicador, indice) => {
-        indicador.addEventListener('click', function() {
+        indicador.addEventListener('click', function () {
             irAImagen(indice)
         })
     })

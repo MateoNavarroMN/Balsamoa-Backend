@@ -4,83 +4,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./recursos/css/index.css">
+    <link rel="stylesheet" href="./recursos/css/global.css">
+    <link rel="stylesheet" href="./recursos/css/nosotros.css">
     <link rel="icon" href="./recursos/imagenes/logo balsamoa.webp" type="image/webp">
     <script type="module" src="./recursos/js/menu.js"></script>
     <title>Balsamoa | Nosotros</title>
 </head>
 
 <body>
+    <div class="anuncioBarra">
+        <div class="anuncioContenido">
+            <span>Envíos a todo el país &nbsp;✦&nbsp; <strong>10% OFF</strong> en tu primera compra &nbsp;✦&nbsp;
+                Diseños con identidad</span>
+            <span>Envíos a todo el país &nbsp;✦&nbsp; <strong>10% OFF</strong> en tu primera compra &nbsp;✦&nbsp;
+                Diseños con identidad</span>
+        </div>
+        <div class="anuncioContenido">
+            <span>Envíos a todo el país &nbsp;✦&nbsp; <strong>10% OFF</strong> en tu primera compra &nbsp;✦&nbsp;
+                Diseños con identidad</span>
+            <span>Envíos a todo el país &nbsp;✦&nbsp; <strong>10% OFF</strong> en tu primera compra &nbsp;✦&nbsp;
+                Diseños con identidad</span>
+        </div>
+        <div class="anuncioContenido">
+            <span>Envíos a todo el país &nbsp;✦&nbsp; <strong>10% OFF</strong> en tu primera compra &nbsp;✦&nbsp;
+                Diseños con identidad</span>
+            <span>Envíos a todo el país &nbsp;✦&nbsp; <strong>10% OFF</strong> en tu primera compra &nbsp;✦&nbsp;
+                Diseños con identidad</span>
+        </div>
+    </div>
+
     <header class="encabezadoPrincipal">
         <div class="contenidoEncPag">
-            <a href="./index.html">
-                <img src="./recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa">
-            </a>
-
-            <!-- Boton menu de celular -->
-            <button class="menuBtn" id="id_menuBtn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="headerTop">
+                <a href="./index.html" class="logoLink">
+                    <img src="./recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa">
+                    <span class="logoTexto">Balsamoa</span>
+                </a>
+            </div>
 
             <nav id="id_menuNav">
                 <ul>
-                    <li><a href="./index.html">Inicio</a></li>
+                    <li><a href="./index.html" class="activo">Inicio</a></li>
                     <li><a href="./productos.html">Productos</a></li>
                     <li><a href="./nosotros.html">Nosotros</a></li>
-                    <li><a href="./contacto.html">Contacto</a></li>
+                    <li><a href="./contacto.html" class="navCta">Contacto</a></li>
                 </ul>
             </nav>
+
+            <button class="menuBtn" id="id_menuBtn" aria-label="Abrir menú">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </header>
-    <!-- Fondo para boton menu de celular -->
+
     <div class="menuOverlay" id="id_menuOverlay"></div>
 
+
     <main>
-        <section class="nosotros">
-            <picture>
-                <source media="(max-width: 768px)" srcset="./recursos/imagenes/nosotrosCelular.webp">
-                <img src="./recursos/imagenes/nosotros.webp" alt="Imagen Balsamoa Nosotros">
-            </picture>
+        <section class="paginaHeader">
+            <span class="seccionEtiqueta">Nuestra historia</span>
+            <h1>Nosotros</h1>
+        </section>
 
+        <section class="nosotrosSeccion">
             <div class="nosotrosContenido">
-                <p><strong>Nosotros</strong></p>
-                
-                <p>Balsamoa nació del sueño de dos amigos que buscaban transformar sus ideas y emociones en prendas
-                    únicas y con alma. No empezamos como una simple marca de ropa, sino como una forma de expresar
-                    quiénes somos y de dónde venimos.</p>
+                <div class="nosotrosHeroInterno">
+                    <span class="seccionEtiqueta">Quiénes somos</span>
+                    <h2 class="nosotrosTitle">Ropa hecha con<br><em>propósito y alma.</em></h2>
+                    <p class="nosotrosLead">Balsamoa nació del sueño de transformar ideas y emociones en prendas únicas.
+                        No somos solo una marca, somos una forma de expresar nuestras raíces cordobesas.</p>
+                </div>
 
-                <p>Nuestras raíces, paisajes, costumbres y encuentros nos inspiran para crear piezas limitadas que
-                    transmiten identidad y cercanía. Cada prenda refleja lo que sentimos como argentinos y cordobeses:
-                    la calidez de lo familiar, los colores de nuestras sierras y la fuerza de nuestra tierra.</p>
+                <div class="nosotrosBloque">
+                    <h2>Nuestra historia</h2>
+                    <p>Nuestros paisajes y cultura nos inspiran para crear prendas exclusivas que transmiten cercanía.
+                        Cada
+                        diseño refleja la calidez de lo familiar y la fuerza de nuestra tierra.</p>
+                </div>
 
-                <p>Creemos en hacer las cosas con sentido. Por eso trabajamos con procesos responsables, materiales
-                    seleccionados con conciencia y una producción que cuida tanto a las personas como al entorno. Para
-                    nosotros, la sustentabilidad no es tendencia: es un compromiso.</p>
 
-                <p>Balsamoa es un proyecto en crecimiento, con aprendizajes, desafíos y muchas ganas de ofrecer ropa que
-                    no solo se vea bien, sino que también se sienta bien. Porque detrás de cada prenda hay valores,
-                    trabajo y pasión.</p>
+                <div class="nosotrosBloque">
+                    <h2>Un proyecto con identidad</h2>
+                    <p>Detrás de cada costura hay valores, trabajo y pasión. Balsamoa es un proyecto en crecimiento que
+                        busca que te sientas bien con lo que usás.</p>
+                </div>
 
-                <p>Esto es Balsamoa, Bienvenidos.</p>
+                <div class="nosotrosBloque">
+                    <h2>Producción consciente</h2>
+                    <p>Trabajamos con procesos responsables y materiales seleccionados. Para nosotros, la
+                        sustentabilidad es un compromiso real con nuestro entorno.</p>
+                    <p class="nosotrosCierre">Esto es Balsamoa. Bienvenidos.</p>
+                </div>
+            </div>
+
+            <div class="nosotrosFoto">
+                <picture>
+                    <!-- <source media="(max-width: 768px)" srcset="./recursos/imagenes/nosotrosCelular.webp"> -->
+                    <source media="(max-width: 900px)" srcset="./recursos/imagenes/nosotrosCelular.webp">
+                    <img src="./recursos/imagenes/nosotros.webp" alt="Imagen Balsamoa Nosotros">
+                </picture>
+            </div>
+        </section>
+
+        <section class="nosotrosValores">
+            <div class="valoresHeader">
+                <span class="seccionEtiqueta">Lo que nos define</span>
+                <h2 class="seccionTitulo">Nuestros valores</h2>
+            </div>
+
+            <div class="valoresGrid">
+                <div class="valorCard">
+                    <div class="valorIcono">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5" />
+                            <path d="M3.5 17c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h3>Identidad</h3>
+                    <p>Lo cordobés y lo cercano vive en cada una de nuestras piezas.</p>
+                </div>
+
+                <div class="valorCard">
+                    <div class="valorIcono">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 2l2.4 5.2 5.6.8-4 3.9.94 5.5L10 14.77 5.06 17.4 6 11.9 2 7.99l5.6-.8L10 2z"
+                                stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h3>Calidad</h3>
+                    <p>Producción que no descuida los detalles para que la ropa sea duradera.</p>
+                </div>
+
+                <div class="valorCard">
+                    <div class="valorIcono">
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                            <path
+                                d="M10 3c-4.5 0-7 3.5-7 7 0 2.5 1.5 4.5 3.5 5.5l.5 1h6l.5-1C15.5 14.5 17 12.5 17 10c0-3.5-2.5-7-7-7z"
+                                stroke="currentColor" stroke-width="1.5" />
+                            <path d="M7.5 16.5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h3>Conciencia</h3>
+                    <p>Una forma de hacer las cosas con sentido desde el principio.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="nosotrosCtaFinal">
+            <h2>¿Querés conocer lo que hacemos?</h2>
+            <p>Explorá nuestra colección y encontrá algo que hable por vos.</p>
+            <div class="ctaBotones">
+                <a href="./productos.html" class="btnPrimario">Ver productos →</a>
             </div>
         </section>
     </main>
 
     <footer class="piePagina">
+        <div class="footerDivider"></div>
         <address class="contenidoPiePag">
-            <a href="https://www.instagram.com/balsamoa1/" target="_blank" class="instagram">
-                <img src="./recursos/imagenes/ig.svg" alt="Logo Instagram">@Balsamoa1
-            </a>
-            <span class="ubicacion">
-                <img src="./recursos/imagenes/ubi.svg" alt="Logo Ubicacion">Cordoba, Argentina
-            </span>
-            <a href="https://wa.me/+5491111111" target="_blank" class="whatsapp">
-                <img src="./recursos/imagenes/ws.svg" alt="Logo Whatsapp">WhatsApp
-            </a>
+            <div class="footerBrand">
+                <img src="./recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa" class="footerLogo">
+                <span class="footerNombre">Balsamoa</span>
+                <span class="footerCopyright">© 2023 — Córdoba, Argentina</span>
+            </div>
+
+            <nav class="footerLinks">
+                <a href="./index.html">Inicio</a>
+                <a href="./productos.html">Productos</a>
+                <a href="./nosotros.html">Nosotros</a>
+                <a href="./contacto.html">Contacto</a>
+            </nav>
+
+            <div class="footerSociales">
+                <a href="https://www.instagram.com/balsamoa1/" target="_blank" class="socialPill instagram">
+                    <img src="./recursos/imagenes/ig.svg" alt="Instagram">
+                    @Balsamoa1
+                </a>
+                <a href="https://maps.app.goo.gl/gQwzdyPWqrRZnwaX9" target="_blank" class="socialPill ubicacion">
+                    <img src="./recursos/imagenes/ubi.svg" alt="Ubicación">
+                    Córdoba, AR
+                </a>
+                <a href="https://wa.me/+5491111111" target="_blank" class="socialPill whatsapp">
+                    <img src="./recursos/imagenes/ws.svg" alt="WhatsApp">
+                    WhatsApp
+                </a>
+            </div>
         </address>
     </footer>
+
+    <a href="https://wa.me/549111111111" class="whatsapp-flotante" target="_blank" aria-label="Chatear por WhatsApp">
+        <img src="./recursos/imagenes/ws.svg" alt="WhatsApp">
+    </a>
+
 </body>
 
 </html>

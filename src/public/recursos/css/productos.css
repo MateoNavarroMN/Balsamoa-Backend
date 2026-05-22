@@ -1,0 +1,448 @@
+/* ============================================================
+   BALSAMOA — Productos.CSS
+   Estilos exclusivos de productos.html
+   ============================================================ */
+
+/* ==============================
+   ENCABEZADO DE PÁGINA
+================================ */
+.paginaHeader {
+    background-color: var(--azul);
+    padding: 56px 40px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.paginaHeader::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(196, 112, 58, 0.18) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.paginaHeader .seccionEtiqueta {
+    color: var(--terracota-claro);
+    margin-bottom: 10px;
+}
+
+.paginaHeader h1 {
+    font-family: var(--fuente-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    color: var(--crema);
+    line-height: 1.1;
+    padding: 0;
+    text-align: center;
+}
+
+/* ==============================
+   BARRA DE CONTROL (filtros/orden)
+================================ */
+.barraControl {
+    max-width: var(--max-ancho);
+    margin: 32px auto 0;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.menuColapsable {
+    position: relative;
+}
+
+.botonDesplegable {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 24px;
+    background-color: var(--blanco);
+    border: 1.5px solid var(--crema-oscuro);
+    border-radius: var(--radio);
+    font-weight: 500;
+    font-size: 14px;
+    font-family: var(--fuente-cuerpo);
+    color: var(--negro);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--sombra);
+    transition: background-color var(--transition), border-color var(--transition);
+    user-select: none;
+}
+
+.botonDesplegable::after {
+    content: '›';
+    font-size: 16px;
+    color: var(--gris-claro);
+    transform: rotate(90deg);
+    display: inline-block;
+    transition: transform var(--transition);
+}
+
+details[open] .botonDesplegable::after {
+    transform: rotate(-90deg);
+}
+
+.botonDesplegable:hover {
+    background-color: var(--crema);
+    border-color: var(--azul);
+}
+
+/* Paneles desplegables */
+.contenidoFiltro,
+.contenidoOrdenar {
+    background-color: var(--blanco);
+    margin-top: 8px;
+    padding: 24px;
+    border-radius: var(--radio-lg);
+    border: 1.5px solid var(--crema-oscuro);
+    box-shadow: var(--sombra-hover);
+    min-width: 280px;
+    position: absolute;
+    z-index: 50;
+    animation: fadeIn 0.2s ease;
+}
+
+.contenidoOrdenar {
+    right: 0;
+    min-width: 240px;
+}
+
+/* Filtros internos */
+.contenidoFiltro h3 {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--azul);
+    margin: 16px 0 10px;
+}
+
+.contenidoFiltro h3:first-child {
+    margin-top: 0;
+}
+
+.contenidoFiltro label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--negro);
+    padding: 4px 0 4px 4px;
+    border-radius: var(--radio);
+    transition: background-color var(--transition);
+}
+
+.contenidoFiltro label:hover {
+    background-color: var(--crema);
+}
+
+.contenidoFiltro input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--terracota);
+    flex-shrink: 0;
+}
+
+.contenidoFiltro input[type="number"] {
+    width: 100%;
+    padding: 9px 12px;
+    margin-top: 6px;
+    border: 1.5px solid var(--crema-oscuro);
+    border-radius: var(--radio);
+    font-size: 14px;
+    font-family: var(--fuente-cuerpo);
+    color: var(--negro);
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    background-color: var(--crema);
+}
+
+.contenidoFiltro input[type="number"]:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(44, 74, 94, 0.08);
+}
+
+.filtrosBotones {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.contenidoFiltro button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radio);
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 500;
+    font-family: var(--fuente-cuerpo);
+    transition: all var(--transition);
+    width: 100%;
+    letter-spacing: 0.02em;
+}
+
+.contenidoFiltro button[type="submit"] {
+    background-color: var(--azul);
+    color: var(--crema);
+}
+
+.contenidoFiltro button[type="submit"]:hover {
+    background-color: var(--azul-oscuro);
+}
+
+.contenidoFiltro button[type="reset"] {
+    background-color: transparent;
+    color: var(--gris);
+    border: 1.5px solid var(--crema-oscuro);
+}
+
+.contenidoFiltro button[type="reset"]:hover {
+    background-color: var(--crema);
+    border-color: var(--gris-claro);
+}
+
+/* Opciones de orden */
+.contenidoOrdenar .opcionOrden {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 11px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--crema-oscuro);
+    cursor: pointer;
+    font-size: 14px;
+    font-family: var(--fuente-cuerpo);
+    color: var(--negro);
+    transition: background-color var(--transition), color var(--transition);
+    border-radius: 0;
+}
+
+.contenidoOrdenar .opcionOrden:first-child {
+    border-radius: var(--radio) var(--radio) 0 0;
+}
+
+.contenidoOrdenar .opcionOrden:last-child {
+    border-bottom: none;
+    border-radius: 0 0 var(--radio) var(--radio);
+}
+
+.contenidoOrdenar .opcionOrden:hover {
+    background-color: var(--crema);
+    color: var(--azul);
+}
+
+/* ==============================
+   GRILLA DE PRODUCTOS
+================================ */
+.productosContenedor {
+    max-width: var(--max-ancho);
+    margin: 32px auto 0;
+    padding: 0 40px;
+}
+
+.productosGrilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    justify-content: center;
+}
+
+.productosGrilla article {
+    background-color: var(--blanco);
+    border-radius: var(--radio-lg);
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    transition: transform var(--transition), box-shadow var(--transition);
+    cursor: pointer;
+    animation: slideIn 0.3s ease both;
+}
+
+.productosGrilla article:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--sombra-hover);
+}
+
+.productosGrilla a {
+    color: var(--negro);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.productosGrilla .imgWrap {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background-color: var(--crema-oscuro);
+}
+
+.productosGrilla a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.55s ease;
+}
+
+.productosGrilla article:hover img {
+    transform: scale(1.05);
+}
+
+.productosGrilla .cardInfo {
+    padding: 18px 20px 22px;
+}
+
+.productosGrilla a h3 {
+    font-family: var(--fuente-display);
+    font-size: 16.5px;
+    font-weight: 400;
+    color: var(--negro);
+    line-height: 1.35;
+    margin-bottom: 6px;
+}
+
+.productosGrilla a p {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--terracota);
+}
+
+/* ==============================
+   PAGINACIÓN
+================================ */
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 40px auto 64px;
+    padding: 0 40px;
+    flex-wrap: wrap;
+}
+
+.paginacion-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 14px;
+    background-color: var(--blanco);
+    color: var(--negro);
+    border: 1.5px solid var(--crema-oscuro);
+    border-radius: var(--radio);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--fuente-cuerpo);
+    cursor: pointer;
+    transition: all var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--sombra);
+    line-height: 1;
+}
+
+.paginacion-btn:hover:not(:disabled):not(.activo) {
+    background-color: var(--crema);
+    border-color: var(--azul);
+    color: var(--azul);
+}
+
+.paginacion-btn.activo {
+    background-color: var(--azul);
+    color: var(--crema);
+    border-color: var(--azul);
+    cursor: default;
+    box-shadow: none;
+}
+
+.paginacion-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.paginacion-nav {
+    color: var(--azul);
+    font-size: 16px;
+    letter-spacing: -0.02em;
+}
+
+.paginacion-puntos {
+    min-width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gris-claro);
+    font-size: 14px;
+    user-select: none;
+}
+
+/* ==============================
+   RESPONSIVE PRODUCTOS
+================================ */
+@media (max-width: 768px) {
+    .paginaHeader {
+        padding: 40px 20px 36px;
+    }
+
+    .barraControl {
+        flex-direction: column;
+        padding: 0 20px;
+        gap: 12px;
+    }
+
+    .menuColapsable {
+        width: 100%;
+    }
+
+    .botonDesplegable {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .contenidoFiltro,
+    .contenidoOrdenar {
+        position: relative;
+        width: 100%;
+        min-width: unset;
+    }
+
+    .productosContenedor {
+        padding: 0 20px;
+    }
+
+    .productosGrilla {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .paginacion {
+        gap: 4px;
+        margin: 32px auto 48px;
+        padding: 0 20px;
+    }
+
+    .paginacion-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 13px;
+        padding: 0 10px;
+    }
+
+    .paginacion-puntos {
+        min-width: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .productosGrilla {
+        grid-template-columns: 1fr;
+    }
+}
