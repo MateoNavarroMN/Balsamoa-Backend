@@ -1,59 +1,59 @@
-// index
 function renderizarProdsDestacados(productos, prodsDest, contenedor) {
-    let contenidoProductos = ''
+    let html = ''
 
     productos.forEach((producto) => {
         prodsDest.forEach((destacado) => {
             if (producto.id == destacado) {
-                const plantillaProductos =
-                    `
-                        <article data-id="${producto.id}">
-                            <a href="">
-                                <img src="${producto.imagen.src}" alt="${producto.imagen.alt}">
+                html += `
+                    <article data-id="${producto.id}">
+                        <a href="./producto.html?id=${producto.id}">
+                            <div class="imgWrap">
+                                <img src="${producto.imagen.src}" alt="${producto.imagen.alt}" loading="lazy">
+                            </div>
+                            <div class="cardInfo">
                                 <h3>${producto.nombre}</h3>
-                                <p>$${producto.precio}</p>
-                            </a>
-                        </article>
-                    `
-                contenidoProductos += plantillaProductos
+                                <p>$${Number(producto.precio).toLocaleString('es-AR')}</p>
+                            </div>
+                        </a>
+                    </article>
+                `
             }
         })
     })
-    contenedor.innerHTML = contenidoProductos
+
+    contenedor.innerHTML = html
 }
 
-// productos
 function renderizarProductos(productos, contenedor, limpiarContenedor = true) {
-    let contenidoProductos = ''
+    let html = ''
 
     productos.forEach((producto) => {
-        const plantillaProductos =
-            `
-                <article data-id="${producto.id}">
-                    <a href="">
-                        <img src="${producto.imagen.src}" alt="${producto.imagen.alt}">
+        html += `
+            <article data-id="${producto.id}">
+                <a href="./producto.html?id=${producto.id}">
+                    <div class="imgWrap">
+                        <img src="${producto.imagen.src}" alt="${producto.imagen.alt}" loading="lazy">
+                    </div>
+                    <div class="cardInfo">
                         <h3>${producto.nombre}</h3>
-                        <p>$${producto.precio}</p>
-                    </a>
-                </article>
-            `
-        contenidoProductos += plantillaProductos
+                        <p>$${Number(producto.precio).toLocaleString('es-AR')}</p>
+                    </div>
+                </a>
+            </article>
+        `
     })
 
     if (limpiarContenedor) {
-        contenedor.innerHTML = contenidoProductos
-    }
-    else {
-        contenedor.insertAdjacentHTML('beforeend', contenidoProductos)
+        contenedor.innerHTML = html
+    } else {
+        contenedor.insertAdjacentHTML('beforeend', html)
     }
 }
 
 function filtrarProductos(productos) {
     const tallesSelect = []
-    const chekboxsTalles = document.querySelectorAll('input[name="talle"]:checked')
-    chekboxsTalles.forEach((chTalle) => {
-        tallesSelect.push(chTalle.value)
-    })
+    document.querySelectorAll('input[name="talle"]:checked')
+        .forEach(cb => tallesSelect.push(cb.value))
 
     const precioDesde = parseFloat(document.querySelector('input[name="precio-desde"]').value)
     const precioHasta = parseFloat(document.querySelector('input[name="precio-hasta"]').value)
@@ -61,48 +61,29 @@ function filtrarProductos(productos) {
     return productos.filter((producto) => {
         let cumpleTalle = true
         if (tallesSelect.length > 0) {
-            cumpleTalle = tallesSelect.some((talle) => {
-                return producto.talles.includes(talle)
-            })
+            cumpleTalle = tallesSelect.some(t => producto.talles.includes(t))
         }
 
         let cumplePrecio = true
-        if (!isNaN(precioDesde) && producto.precio < precioDesde) {
-            cumplePrecio = false
-        }
-
-        if (!isNaN(precioHasta) && producto.precio > precioHasta) {
-            cumplePrecio = false
-        }
+        if (!isNaN(precioDesde) && producto.precio < precioDesde) cumplePrecio = false
+        if (!isNaN(precioHasta) && producto.precio > precioHasta) cumplePrecio = false
 
         return cumpleTalle && cumplePrecio
     })
 }
 
 function ordenarProductos(productos, orden) {
-    const productosOrdenados = [...productos]
+    const copia = [...productos]
 
     switch (orden) {
-        case 'precioAsc':
-            productosOrdenados.sort((prodA, prodB) => prodA.precio - prodB.precio)
-            break    
-        case 'precioDesc':
-            productosOrdenados.sort((prodA, prodB) => prodB.precio - prodA.precio)
-            break
-        case 'masNuevo':
-            productosOrdenados.sort((prodA, prodB) => prodB.id - prodA.id)
-            break
-        case 'masAntiguo':
-            productosOrdenados.sort((prodA, prodB) => prodA.id - prodB.id)
-            break
+        case 'precioAsc': copia.sort((a, b) => a.precio - b.precio); break
+        case 'precioDesc': copia.sort((a, b) => b.precio - a.precio); break
+        case 'masNuevo': copia.sort((a, b) => b.id - a.id); break
+        case 'masAntiguo': copia.sort((a, b) => a.id - b.id); break
     }
 
-    return productosOrdenados
+    return copia
 }
 
-// index
 export { renderizarProdsDestacados }
-// productos
 export { renderizarProductos, filtrarProductos, ordenarProductos }
-
-

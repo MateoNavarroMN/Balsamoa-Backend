@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./recursos/css/global.css">
-    <link rel="stylesheet" href="./recursos/css/contacto.css">
+    <link rel="stylesheet" href="./recursos/css/producto.css">
     <link rel="icon" href="./recursos/imagenes/logo balsamoa.webp" type="image/webp">
+    <script type="module" src="./recursos/js/producto.js"></script>
     <script type="module" src="./recursos/js/menu.js"></script>
-    <title>Balsamoa | Contacto</title>
+    <title>Balsamoa | Producto</title>
 </head>
 
 <body>
@@ -44,8 +45,8 @@
 
             <nav id="id_menuNav">
                 <ul>
-                    <li><a href="./index.html" class="activo">Inicio</a></li>
-                    <li><a href="./productos.html">Productos</a></li>
+                    <li><a href="./index.html">Inicio</a></li>
+                    <li><a href="./productos.html" class="activo">Productos</a></li>
                     <li><a href="./nosotros.html">Nosotros</a></li>
                     <li><a href="./contacto.html" class="navCta">Contacto</a></li>
                 </ul>
@@ -60,89 +61,108 @@
     <div class="menuOverlay" id="id_menuOverlay"></div>
 
     <main>
-        <section class="paginaHeader">
-            <span class="seccionEtiqueta">Hablemos</span>
-            <h1>Contacto</h1>
-        </section>
 
-        <div class="contactoLayout">
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+            <a href="./index.html">Inicio</a>
+            <span>›</span>
+            <a href="./productos.html">Productos</a>
+            <span>›</span>
+            <span class="breadcrumbActual" id="js_breadcrumbNombre">Cargando…</span>
+        </nav>
 
-            <aside class="contactoInfo">
-                <div>
-                    <h2>Estamos para<br><em>ayudarte.</em></h2>
-                    <p class="intro">¿Tenés alguna consulta o simplemente querés saludar? Escribinos por acá o
-                        encontranos en nuestras redes.</p>
+        <div class="skeleton" id="js_skeleton">
+            <div class="skeletonImg"></div>
+            <div class="skeletonTexto">
+                <div class="skeletonLinea ancha"></div>
+                <div class="skeletonLinea media"></div>
+                <div class="skeletonLinea corta"></div>
+                <div class="skeletonLinea ancha"></div>
+                <div class="skeletonLinea media"></div>
+                <div class="skeletonLinea ancha"></div>
+            </div>
+        </div>
+
+        <div class="errorDetalle" id="js_error">
+            <span class="errorIcono">⚠️</span>
+            <p>Ocurrió un error inesperado.</p>
+            <a href="./productos.html">← Volver al catálogo</a>
+        </div>
+
+        <div class="contenidoDetalle" id="js_contenidoDetalle">
+
+            <div class="productoGaleria">
+                <div class="imgPrincipalWrap">
+                    <img src="" alt="" id="js_imgPrincipal">
+                    <img src="" alt="" id="js_imgNombre" style="display:none">
                 </div>
-
-                <div class="contactoSidebar">
-                    <h3 class="sidebarTitulo">Contacto directo</h3>
-
-                    <a href="https://wa.me/+5491111111" target="_blank" class="contactoCard whatsappCard">
-                        <div class="contactoCardIcono">
-                            <img src="./recursos/imagenes/ws.svg" alt="WhatsApp">
-                        </div>
-                        <div class="contactoCardInfo">
-                            <span class="contactoCardLabel">WhatsApp</span>
-                            <span class="contactoCardVal">Respuesta rápida</span>
-                        </div>
-                        <svg class="contactoCardArrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-
-                    <a href="https://www.instagram.com/balsamoa1/" target="_blank" class="contactoCard instagramCard">
-                        <div class="contactoCardIcono">
-                            <img src="./recursos/imagenes/ig.svg" alt="Instagram">
-                        </div>
-                        <div class="contactoCardInfo">
-                            <span class="contactoCardLabel">Instagram</span>
-                            <span class="contactoCardVal">@Balsamoa1</span>
-                        </div>
-                        <svg class="contactoCardArrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    
-                </div>
-
-                <div class="contactoHorario">
-                    <p><strong>Horarios de atención</strong> Lunes a Viernes de 9:00 a 18:00 hs.<br>Sábados de 10:00 a
-                        13:00 hs.</p>
-                </div>
-            </aside>
-
-            <div class="formularioWrap">
-                <h3>Envianos un mensaje</h3>
-                <form action="https://formspree.io/f/mkgkppkl" method="post" class="formularioContacto">
-                    <div class="campoGrupo">
-                        <div class="campo">
-                            <label for="id_nombre">Nombre</label>
-                            <input type="text" name="nombre" id="id_nombre" placeholder="Tu nombre" required>
-                        </div>
-                        <div class="campo">
-                            <label for="id_telefono">Teléfono</label>
-                            <input type="tel" name="telefono" id="id_telefono" placeholder="Tu teléfono" required>
-                        </div>
-                    </div>
-
-                    <div class="campo">
-                        <label for="id_email">Email</label>
-                        <input type="email" name="email" id="id_email" placeholder="tu@email.com" required>
-                    </div>
-
-                    <div class="campo">
-                        <label for="id_mensaje">Mensaje</label>
-                        <textarea name="mensaje" id="id_mensaje" placeholder="¿En qué te podemos ayudar?"
-                            required></textarea>
-                    </div>
-
-                    <button type="submit">Enviar mensaje</button>
-                </form>
             </div>
 
+            <div class="productoInfo">
+
+                <div class="infoTop">
+                    <span class="categoriaBadge">Balsamoa</span>
+                    <h1 class="productoNombre" id="js_nombre">Cargando…</h1>
+                    <p class="productoPrecio" id="js_precio">—</p>
+                    <p class="precioSubtexto">Precio final · IVA incluido</p>
+                </div>
+
+                <div class="infoDivisor"></div>
+
+                <div>
+                    <p class="descripcionLabel">Descripción</p>
+                    <p class="productoDescripcion" id="js_descripcion">Cargando…</p>
+                </div>
+
+                <div class="infoDivisor"></div>
+
+                <div class="tallesBloque">
+                    <div class="tallesHeader">
+                        <span class="tallesLabel">Talle</span>
+                        <span class="talleSeleccionado" id="js_talleSeleccionado"></span>
+                    </div>
+                    <div class="tallesGrid" id="js_talles">
+                    </div>
+                </div>
+
+                <div class="accionesBloque">
+                    <button type="button" class="btnComprar" id="js_btnComprar">
+                        🛒 Comprar ahora
+                    </button>
+                    <button type="button" class="btnWhatsapp" id="js_btnWhatsapp">
+                        <img src="./recursos/imagenes/ws.svg" alt="WhatsApp">
+                        Consultar por WhatsApp
+                    </button>
+                </div>
+
+                <div class="garantiasBloque">
+                    <div class="garantiaItem">
+                        <span class="garantiaIcono">🚚</span>
+                        <span>Envíos a todo el país</span>
+                    </div>
+                    <div class="garantiaItem">
+                        <span class="garantiaIcono">✂️</span>
+                        <span>Fabricación propia</span>
+                    </div>
+                    <div class="garantiaItem">
+                        <span class="garantiaIcono">💬</span>
+                        <span>Atención personalizada por WhatsApp</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+        <section class="relacionadosSeccion">
+            <div class="relacionadosInner">
+                <div class="relacionadosHeader">
+                    <h2>También te puede interesar</h2>
+                    <a href="./productos.html">Ver catálogo completo →</a>
+                </div>
+                <div class="relacionadosGrilla" id="js_relacionados">
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="piePagina">
