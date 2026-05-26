@@ -1,8 +1,9 @@
+import { pool } from "../../config/bd.mjs"
+
 export async function obtenerProductosApi(){
     try {
-        const respuestaApi = await fetch('https://69d676ce1c120e733cce4248.mockapi.io/productos-balsamoa')
-        const datosApi = respuestaApi.json()
-        return datosApi
+        const resultado = await pool.query('SELECT * FROM productos')
+        return resultado.rows
     } catch (error) {
         return { mensaje: error}
     }
