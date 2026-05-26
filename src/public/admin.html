@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balsamoa — Panel de Administración</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <link rel="stylesheet" href="./recursos/css/admin.css">
+</head>
+
+<body>
+
+  <!-- Overlay que oscurece el fondo cuando el sidebar está abierto en mobile -->
+  <div class="sidebar-overlay"></div>
+
+  <div class="admin-layout">
+
+    <aside class="sidebar">
+      <a class="sidebar-logo" href="#">
+        <div class="sidebar-logo-icon" style="background: transparent;">
+          <img src="./recursos/imagenes/logo balsamoa.webp" alt="Icono Balsamoa"
+            style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div>
+          <span class="sidebar-logo-name">Balsamoa</span>
+          <span class="sidebar-logo-sub">Panel de administración</span>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">Principal</div>
+        <div class="nav-item active" id="nav-dashboard" onclick="navegarA('dashboard')">
+          <i class="ti ti-layout-dashboard"></i><span>Dashboard</span>
+        </div>
+        <div class="nav-item" id="nav-pedidos" onclick="navegarA('pedidos')">
+          <i class="ti ti-shopping-bag"></i><span>Pedidos</span>
+        </div>
+
+        <div class="nav-group-label" style="margin-top:8px">Catálogo</div>
+        <div class="nav-item" id="nav-catalogo" onclick="navegarA('catalogo')">
+          <i class="ti ti-hanger"></i><span>Productos</span>
+        </div>
+        <div class="nav-group-label" style="margin-top:8px">Comunidad</div>
+        <div class="nav-item" id="nav-clientes" onclick="navegarA('clientes')">
+          <i class="ti ti-users"></i><span>Clientes</span>
+        </div>
+        <div class="nav-item" id="nav-newsletter" onclick="navegarA('newsletter')">
+          <i class="ti ti-mail"></i><span>Newsletter</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name">Administrador</div>
+          <div class="user-role">Panel de Control</div>
+        </div>
+        <button class="btn-theme" onclick="alternarTema()" title="Cambiar tema">
+          <i class="ti ti-moon" id="icono-tema"></i>
+        </button>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <!-- Botón hamburguesa: solo visible en mobile -->
+          <button class="btn-menu" id="btn-menu" aria-label="Abrir menú">
+            <i class="ti ti-menu-2"></i>
+          </button>
+          <span class="topbar-title" id="topbar-titulo">Dashboard</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <div class="toast" id="toast">
+          <i class="ti ti-check"></i>
+          <span id="toast-mensaje"></span>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="section active" id="section-dashboard">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label"><i class="ti ti-currency-dollar"></i>Ventas del mes</div>
+              <div class="kpi-value" id="kpi-ventas">$0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label"><i class="ti ti-shopping-bag"></i>Pedidos activos</div>
+              <div class="kpi-value" id="kpi-pedidos">0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label"><i class="ti ti-alert-triangle"></i>Stock crítico</div>
+              <div class="kpi-value" id="kpi-stock">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="section" id="section-pedidos">
+          <div class="section-header">
+            <h2 class="section-title">Gestión de Pedidos</h2>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th>#Pedido</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Pago</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="pedidos-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATÁLOGO -->
+        <div class="section" id="section-catalogo">
+          <div class="section-header">
+            <h2 class="section-title">Catálogo de productos</h2>
+            <button class="btn btn-primary">
+              <i class="ti ti-plus"></i> Nuevo producto
+            </button>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock total</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="catalogo-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" id="section-clientes">
+          <div class="section-header">
+            <h2 class="section-title">Clientes</h2>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Pedidos</th>
+                    <th>Total Gastado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="clientes-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" id="section-newsletter">
+          <div class="section-header">
+            <h2 class="section-title">Newsletter</h2>
+            <button class="btn btn-outline" onclick="mostrarToast('Función de exportar próximamente', 'ti-download')">
+              <i class="ti ti-download"></i> Exportar CSV
+            </button>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Fecha Suscripción</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="newsletter-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="./recursos/js/admin.js"></script>
+</body>
+
+</html>
