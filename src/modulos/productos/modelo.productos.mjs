@@ -1,4 +1,4 @@
-import { pool } from "../../config/bd.mjs"
+import pool from "../../config/conexion.bd.mjs"
 
 export async function obtenerProductosApi(){
     try {
