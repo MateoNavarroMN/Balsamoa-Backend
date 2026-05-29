@@ -4,7 +4,7 @@ export async function obtenerProductos(req, res){
     const productos = await modelo.obtenerProductos()
 
     if(productos.length === 0){
-        res.status(404).json({ mensaje: 'Registros no encontrados'})
+        return res.status(404).json({ mensaje: 'Registros no encontrados'})
     }
 
     res.json(productos)
@@ -15,7 +15,7 @@ export async function obtenerProductoPorId(req, res){
     const productos = await modelo.obtenerProductoPorId(id)
 
     if(productos.length === 0){
-        res.status(400).json({ mensaje: 'Registro no encontrado'})
+        return res.status(400).json({ mensaje: 'Registro no encontrado'})
     }
 
     res.json(productos)
