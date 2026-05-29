@@ -1,8 +1,10 @@
 import { Router } from "express"
-import { obtenerProductos } from './controlador.productos.mjs'
+import * as controlador from './controlador.productos.mjs'
 
-const routerProductos = new Router()
+const rutasProductos = new Router()
 
-routerProductos.get('/productos', obtenerProductos)
+rutasProductos.get('/api/v1/productos', controlador.obtenerProductos)
 
-export default routerProductos
+rutasProductos.get('/api/v1/productos/:id', controlador.obtenerProductoPorId)
+
+export default rutasProductos
