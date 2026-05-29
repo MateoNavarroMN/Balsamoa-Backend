@@ -15,23 +15,15 @@
 
 <body>
 
-  <!-- Overlay que oscurece el fondo cuando el sidebar está abierto en mobile -->
-  <div class="sidebar-overlay"></div>
-
   <div class="admin-layout">
-
     <aside class="sidebar">
       <a class="sidebar-logo" href="#">
-        <div class="sidebar-logo-icon" style="background: transparent;">
-          <img src="./recursos/imagenes/logo balsamoa.webp" alt="Icono Balsamoa"
-            style="width: 100%; height: 100%; object-fit: contain;">
-        </div>
+        <div class="sidebar-logo-icon">B</div>
         <div>
           <span class="sidebar-logo-name">Balsamoa</span>
           <span class="sidebar-logo-sub">Panel de administración</span>
         </div>
       </a>
-
       <nav class="sidebar-nav">
         <div class="nav-group-label">Principal</div>
         <div class="nav-item active" id="nav-dashboard" onclick="navegarA('dashboard')">
@@ -40,7 +32,6 @@
         <div class="nav-item" id="nav-pedidos" onclick="navegarA('pedidos')">
           <i class="ti ti-shopping-bag"></i><span>Pedidos</span>
         </div>
-
         <div class="nav-group-label" style="margin-top:8px">Catálogo</div>
         <div class="nav-item" id="nav-catalogo" onclick="navegarA('catalogo')">
           <i class="ti ti-hanger"></i><span>Productos</span>
@@ -53,12 +44,10 @@
           <i class="ti ti-mail"></i><span>Newsletter</span>
         </div>
       </nav>
-
       <div class="sidebar-footer">
         <div class="user-avatar">AD</div>
-        <div class="user-info">
-          <div class="user-name">Administrador</div>
-          <div class="user-role">Panel de Control</div>
+        <div>
+          <div class="user-name" style="font-size: 12px;">Administrador</div>
         </div>
         <button class="btn-theme" onclick="alternarTema()" title="Cambiar tema">
           <i class="ti ti-moon" id="icono-tema"></i>
@@ -68,13 +57,8 @@
 
     <div class="main-area">
       <header class="topbar">
-        <div class="topbar-left">
-          <!-- Botón hamburguesa: solo visible en mobile -->
-          <button class="btn-menu" id="btn-menu" aria-label="Abrir menú">
-            <i class="ti ti-menu-2"></i>
-          </button>
-          <span class="topbar-title" id="topbar-titulo">Dashboard</span>
-        </div>
+        <span class="topbar-title" id="topbar-titulo">Dashboard</span>
+        <span class="topbar-fecha" id="topbar-fecha"></span>
       </header>
 
       <main class="content-area">
@@ -83,28 +67,36 @@
           <span id="toast-mensaje"></span>
         </div>
 
-        <!-- DASHBOARD -->
         <div class="section active" id="section-dashboard">
           <div class="kpi-grid">
             <div class="kpi-card">
               <div class="kpi-label"><i class="ti ti-currency-dollar"></i>Ventas del mes</div>
-              <div class="kpi-value" id="kpi-ventas">$0</div>
+              <div class="kpi-value" id="kpi-ventas">...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-label"><i class="ti ti-shopping-bag"></i>Pedidos activos</div>
-              <div class="kpi-value" id="kpi-pedidos">0</div>
+              <div class="kpi-value" id="kpi-pedidos">...</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label"><i class="ti ti-users"></i>Clientes únicos</div>
+              <div class="kpi-value" id="kpi-clientes">...</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-label"><i class="ti ti-alert-triangle"></i>Stock crítico</div>
-              <div class="kpi-value" id="kpi-stock">0</div>
+              <div class="kpi-value" id="kpi-stock">...</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="empty-state" style="padding: 40px; text-align: center; color: var(--txt-3);">
+              <i class="ti ti-chart-bar" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+              Los gráficos se activarán cuando se conecte el módulo de reportes.
             </div>
           </div>
         </div>
 
-        <!-- PEDIDOS -->
         <div class="section" id="section-pedidos">
           <div class="section-header">
-            <h2 class="section-title">Gestión de Pedidos</h2>
+            <h2 class="section-title">Pedidos</h2>
           </div>
           <div class="card">
             <div class="table-wrap">
@@ -114,6 +106,7 @@
                     <th>#Pedido</th>
                     <th>Cliente</th>
                     <th>Fecha</th>
+                    <th>Artículos</th>
                     <th>Total</th>
                     <th>Pago</th>
                     <th>Estado</th>
@@ -126,25 +119,46 @@
           </div>
         </div>
 
-        <!-- CATÁLOGO -->
         <div class="section" id="section-catalogo">
           <div class="section-header">
             <h2 class="section-title">Catálogo de productos</h2>
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" onclick="abrirModalProducto()">
               <i class="ti ti-plus"></i> Nuevo producto
             </button>
           </div>
+
+          <div class="filter-bar">
+            <select id="filtro-categoria-prod" onchange="aplicarFiltrosCatalogo()">
+              <option value="">Todas las categorías</option>
+              <option value="Remera">Remeras</option>
+              <option value="Hoodie">Hoodies</option>
+              <option value="Campera">Camperas</option>
+              <option value="Pantalone">Pantalones</option>
+            </select>
+            <select id="filtro-destacado-prod" onchange="aplicarFiltrosCatalogo()">
+              <option value="">Todos los productos</option>
+              <option value="si">Solo destacados</option>
+              <option value="no">No destacados</option>
+            </select>
+            <select id="filtro-activo-prod" onchange="aplicarFiltrosCatalogo()">
+              <option value="">Activos e inactivos</option>
+              <option value="activo">Solo activos</option>
+              <option value="inactivo">Solo inactivos</option>
+            </select>
+          </div>
+
           <div class="card">
             <div class="table-wrap">
               <table class="tbl">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Producto</th>
                     <th>Categoría</th>
                     <th>Precio</th>
+                    <th>Stock por talle</th>
+                    <th>Colores</th>
                     <th>Stock total</th>
-                    <th>Estado</th>
+                    <th>Destacado</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -166,9 +180,9 @@
                     <th>Cliente</th>
                     <th>Email</th>
                     <th>Teléfono</th>
+                    <th>Dirección de envío</th>
                     <th>Pedidos</th>
-                    <th>Total Gastado</th>
-                    <th>Acciones</th>
+                    <th>Total gastado</th>
                   </tr>
                 </thead>
                 <tbody id="clientes-tbody"></tbody>
@@ -180,9 +194,6 @@
         <div class="section" id="section-newsletter">
           <div class="section-header">
             <h2 class="section-title">Newsletter</h2>
-            <button class="btn btn-outline" onclick="mostrarToast('Función de exportar próximamente', 'ti-download')">
-              <i class="ti ti-download"></i> Exportar CSV
-            </button>
           </div>
           <div class="card">
             <div class="table-wrap">
@@ -191,7 +202,7 @@
                   <tr>
                     <th>#</th>
                     <th>Email</th>
-                    <th>Fecha Suscripción</th>
+                    <th>Fecha suscripción</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                   </tr>
@@ -201,7 +212,69 @@
             </div>
           </div>
         </div>
+
       </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-producto" onclick="cerrarModal('modal-producto', event)">
+    <div class="modal-caja" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-titulo" id="modal-producto-titulo">Nuevo Producto</span>
+        <button class="modal-cerrar" onclick="cerrarModal('modal-producto')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-producto">
+          <input type="hidden" id="prod-id">
+          <div class="form-group">
+            <label class="form-label">Nombre del producto</label>
+            <input type="text" id="prod-nombre" class="form-control" placeholder="Ej: Remera Oversize" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea id="prod-descripcion" class="form-control" rows="3" style="resize: vertical;"
+              placeholder="Detalles de tela, calce, cuidados..."></textarea>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label class="form-label">Categoría</label>
+              <select id="prod-categoria" class="form-control" required>
+                <option value="">Seleccionar...</option>
+                <option value="1">Remeras</option>
+                <option value="2">Buzos</option>
+                <option value="3">Camperas</option>
+                <option value="4">Pantalones</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio ($)</label>
+              <input type="number" id="prod-precio" class="form-control" placeholder="Ej: 15000" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">URL de Imagen Principal</label>
+            <input type="text" id="prod-imagen" class="form-control" placeholder="https://...">
+          </div>
+          <div
+            style="display: flex; gap: 20px; margin-top: 10px; padding: 10px; background: var(--bg-app); border-radius: 8px;">
+            <label
+              style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: 500;">
+              <input type="checkbox" id="prod-destacado" style="accent-color: var(--brand); width: 16px; height: 16px;">
+              Destacado
+            </label>
+            <label
+              style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: 500;">
+              <input type="checkbox" id="prod-activo" checked
+                style="accent-color: var(--success); width: 16px; height: 16px;"> Activo (Visible)
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer"
+        style="padding: 18px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-surface);">
+        <button class="btn btn-outline" onclick="cerrarModal('modal-producto')">Cancelar</button>
+        <button class="btn btn-primary" onclick="guardarProducto()">Guardar Producto</button>
+      </div>
     </div>
   </div>
 

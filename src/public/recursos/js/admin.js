@@ -1,13 +1,12 @@
 // ==========================================
-// CONTROLADORES VISUALES (UI)
+// CONTROLADORES DE NAVEGACIÓN Y UI
 // ==========================================
-
 const TITULOS_SECCION = {
   dashboard: 'Dashboard',
   pedidos: 'Gestión de Pedidos',
   catalogo: 'Catálogo de Productos',
   clientes: 'Clientes Registrados',
-  newsletter: 'Suscriptores Newsletter'
+  newsletter: 'Newsletter'
 };
 
 function navegarA(nombre) {
@@ -18,12 +17,19 @@ function navegarA(nombre) {
   document.getElementById(`nav-${nombre}`)?.classList.add('active');
   document.getElementById('topbar-titulo').textContent = TITULOS_SECCION[nombre] ?? 'Panel';
 
-  cerrarSidebar();
+  // Disparamos las llamadas al backend según la pestaña
+  if (nombre === 'catalogo') cargarCatalogoDesdeBD();
+  if (nombre === 'pedidos') cargarPedidosDesdeBD();
+  if (nombre === 'clientes') cargarClientesDesdeBD();
+  if (nombre === 'newsletter') cargarNewsletterDesdeBD();
+  if (nombre === 'dashboard') cargarDashboardDesdeBD();
+}
 
-  if (nombre === 'catalogo') cargarCatalogo();
-  if (nombre === 'pedidos') cargarPedidos();
-  if (nombre === 'clientes') cargarClientes();
-  if (nombre === 'newsletter') cargarNewsletter();
+function alternarTema() {
+  const html = document.documentElement;
+  const esDark = html.dataset.theme === 'dark';
+  html.dataset.theme = esDark ? 'light' : 'dark';
+  document.getElementById('icono-tema').className = esDark ? 'ti ti-moon' : 'ti ti-sun';
 }
 
 function mostrarToast(mensaje, icono = 'ti-check') {
@@ -34,266 +40,225 @@ function mostrarToast(mensaje, icono = 'ti-check') {
   setTimeout(() => toast.classList.remove('visible'), 3000);
 }
 
-function alternarTema() {
-  const html = document.documentElement;
-  const esDark = html.dataset.theme === 'dark';
-  html.dataset.theme = esDark ? 'light' : 'dark';
-  document.getElementById('icono-tema').className = esDark ? 'ti ti-moon' : 'ti ti-sun';
-}
-
 // ==========================================
-// SIDEBAR MÓVIL — DRAWER
+// MÓDULO: CATÁLOGO (CONECTADO REAL A BD)
 // ==========================================
+let catalogoMemoria = []; // Memoria global para editar productos sin recargar
 
-function abrirSidebar() {
-  document.querySelector('.sidebar').classList.add('open');
-  document.querySelector('.sidebar-overlay').classList.add('visible');
-}
-
-function cerrarSidebar() {
-  document.querySelector('.sidebar').classList.remove('open');
-  document.querySelector('.sidebar-overlay').classList.remove('visible');
-}
-
-// ==========================================
-// HELPER: inyectar data-label en <td>
-// para la vista de tarjeta en mobile
-// ==========================================
-function inyectarDataLabels(tbodyId) {
-  const tbody = document.getElementById(tbodyId);
-  const table = tbody?.closest('table');
-  if (!table) return;
-
-  const headers = [...table.querySelectorAll('thead th')]
-    .map(th => th.textContent.trim());
-
-  table.querySelectorAll('tbody tr').forEach(tr => {
-    [...tr.querySelectorAll('td')].forEach((td, i) => {
-      td.setAttribute('data-label', headers[i] ?? '');
-    });
-  });
-}
-
-// ==========================================
-// CONEXIÓN AL BACKEND (FETCH API)
-// ==========================================
-
-async function cargarCatalogo() {
+async function cargarCatalogoDesdeBD() {
   const tbody = document.getElementById('catalogo-tbody');
-  tbody.innerHTML = `
-    <tr><td colspan="7">
-      <div class="empty-state">
-        <i class="ti ti-loader"></i>Cargando productos...
-      </div>
-    </td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="8"><div style="text-align:center; padding:20px; color:var(--txt-3);"><i class="ti ti-loader"></i> Cargando productos...</div></td></tr>`;
 
   try {
-    const response = await fetch('/api/admin/productos');
+    const response = await fetch('/api/v1/productos');
     const productos = await response.json();
-    renderizarCatalogo(productos);
+
+    // Si la BD devuelve error
+    if (productos.mensaje) throw new Error(productos.mensaje);
+
+    catalogoMemoria = productos;
+    aplicarFiltrosCatalogo();
   } catch (error) {
-    console.error('Error al cargar catálogo:', error);
-    tbody.innerHTML = `
-      <tr><td colspan="7">
-        <div class="empty-state">
-          <i class="ti ti-plug-connected-x"></i>
-          Esperando conexión con el backend...
-        </div>
-      </td></tr>`;
+    console.error('Error:', error);
+    tbody.innerHTML = `<tr><td colspan="8"><div style="text-align:center; padding:20px; color:var(--danger);"><i class="ti ti-plug-connected-x"></i> Error al conectar con el backend</div></td></tr>`;
   }
 }
 
-function renderizarCatalogo(productos) {
-  const tbody = document.getElementById('catalogo-tbody');
+// ==========================================
+// LÓGICA DE FILTROS DEL CATÁLOGO
+// ==========================================
+function aplicarFiltrosCatalogo() {
+  const filtroCat = document.getElementById('filtro-categoria-prod').value;
+  const filtroDest = document.getElementById('filtro-destacado-prod').value;
+  const filtroActivo = document.getElementById('filtro-activo-prod').value;
 
-  if (!productos.length) {
-    tbody.innerHTML = `
-      <tr><td colspan="7">
-        <div class="empty-state">
-          <i class="ti ti-package-off"></i>No hay productos cargados
-        </div>
-      </td></tr>`;
+  // Filtramos la memoria global sin tocar la base de datos
+  const productosFiltrados = catalogoMemoria.filter(p => {
+
+    // Filtro 1: Categoría
+    if (filtroCat !== '' && p.categoria !== filtroCat) return false;
+
+    // Filtro 2: Destacados
+    if (filtroDest === 'si' && p.destacado === false) return false;
+    if (filtroDest === 'no' && p.destacado === true) return false;
+
+    // Filtro 3: Activos / Inactivos
+    if (filtroActivo === 'activo' && p.activo === false) return false;
+    if (filtroActivo === 'inactivo' && p.activo === true) return false;
+
+    return true; // Si pasa todos los filtros, lo mostramos
+  });
+
+  // Le mandamos la lista filtrada a la función que ya dibuja la tabla
+  renderizarCatologoHTML(productosFiltrados);
+}
+
+function renderizarCatologoHTML(productos) {
+  const tbody = document.getElementById('catalogo-tbody');
+  if (productos.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div style="text-align:center; padding:20px; color:var(--txt-3);">No hay productos registrados</div></td></tr>`;
     return;
   }
+
+  const formatARS = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 });
+  const formatFecha = new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
 
   tbody.innerHTML = productos.map(p => {
-    const badgeEstado =
-      p.estado === 'activo' ? 'badge-success' :
-        p.estado === 'stock_critico' ? 'badge-warning' :
-          p.estado === 'sin_stock' ? 'badge-danger' : 'badge-neutral';
+    let fechaLimpia = p.fecha_creacion ? formatFecha.format(new Date(p.fecha_creacion)).replace('.', '') : '';
 
-    const labelEstado =
-      p.estado === 'activo' ? 'Activo' :
-        p.estado === 'stock_critico' ? 'Stock crítico' :
-          p.estado === 'sin_stock' ? 'Sin stock' : p.estado;
+    const pillsTalles = p.stock_por_talle.map(st => {
+      let clase = st.cantidad === 0 ? 'agotado' : st.cantidad <= 2 ? 'critico' : st.cantidad <= 5 ? 'bajo' : 'normal';
+      let cantTexto = st.cantidad === 0 ? '✕' : st.cantidad;
+      return `<span class="stock-pill ${clase}">${st.talle}: ${cantTexto}</span>`;
+    }).join('');
+
+    const swatchesColores = p.colores_hex.map(hex => {
+      const borde = hex.toUpperCase() === '#FFFFFF' ? 'border: 1px solid var(--border-strong);' : '';
+      return `<span class="color-swatch" style="background:${hex}; ${borde}"></span>`;
+    }).join('');
+
+    const colorStock = p.stock_total === 0 ? 'var(--danger)' : p.stock_total <= 4 ? 'var(--warning)' : 'var(--success)';
+    const imagenHTML = p.imagen_principal ? `<img src="${p.imagen_principal}" style="width:100%;height:100%;object-fit:cover;">` : `<i class="ti ti-photo" style="color:var(--txt-3)"></i>`;
 
     return `
-      <tr>
-        <td>${p.id}</td>
-        <td>${p.nombre}</td>
-        <td>${p.categoria}</td>
-        <td>${p.precio}</td>
-        <td>${p.stock}</td>
-        <td><span class="badge ${badgeEstado}">${labelEstado}</span></td>
+      <tr style="${p.activo ? '' : 'opacity: 0.65;'}">
         <td>
-          <button class="btn btn-sm btn-outline"><i class="ti ti-edit"></i><span>Editar</span></button>
-          <button class="btn btn-sm btn-danger" style="margin-left:4px"><i class="ti ti-trash"></i></button>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="producto-thumb" style="padding:0; overflow:hidden;">${imagenHTML}</div>
+            <div>
+              <div style="font-weight:500">${p.nombre}</div>
+              <div style="display:flex;gap:5px;margin-top:2px">
+                ${!p.activo ? '<span class="badge badge-danger" style="font-size:9px">Inactivo</span>' : ''}
+                <span style="font-size:11px;color:var(--txt-3)">${fechaLimpia}</span>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge-neutral">${p.categoria || 'Sin Categoría'}</span></td>
+        <td style="font-weight:600">${formatARS.format(p.precio)}</td>
+        <td><div class="stock-pills">${pillsTalles || '<span style="color:var(--txt-3)">Sin variantes</span>'}</div></td>
+        <td>
+          <div class="color-swatches">${swatchesColores}</div>
+          <div style="font-size:10px;color:var(--txt-3);margin-top:3px">${p.colores_hex.length} colores</div>
+        </td>
+        <td style="font-weight:700;color:${colorStock}">${p.stock_total}</td>
+        <td style="text-align:center"><button class="btn-destacado" style="color:${p.destacado ? '#C4703A' : 'var(--txt-3)'}">${p.destacado ? '★' : '☆'}</button></td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" onclick="abrirModalProducto(${p.id})"><i class="ti ti-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="mostrarToast('Eliminado lógico pendiente', 'ti-trash')"><i class="ti ti-${p.activo ? 'eye-off' : 'eye'}"></i></button>
+          </div>
         </td>
       </tr>`;
   }).join('');
-
-  inyectarDataLabels('catalogo-tbody');
-}
-
-async function cargarPedidos() {
-  const tbody = document.getElementById('pedidos-tbody');
-  tbody.innerHTML = `
-    <tr><td colspan="7">
-      <div class="empty-state">
-        <i class="ti ti-loader"></i>Cargando pedidos...
-      </div>
-    </td></tr>`;
-
-  try {
-    const response = await fetch('/api/admin/pedidos');
-    const pedidos = await response.json();
-    renderizarPedidos(pedidos);
-  } catch (error) {
-    console.error('Error al cargar pedidos:', error);
-    tbody.innerHTML = `
-      <tr><td colspan="7">
-        <div class="empty-state">
-          <i class="ti ti-plug-connected-x"></i>
-          Esperando conexión con el backend...
-        </div>
-      </td></tr>`;
-  }
-}
-
-function renderizarPedidos(pedidos) {
-  const tbody = document.getElementById('pedidos-tbody');
-
-  if (!pedidos.length) {
-    tbody.innerHTML = `
-      <tr><td colspan="7">
-        <div class="empty-state">
-          <i class="ti ti-shopping-bag-x"></i>No hay pedidos registrados
-        </div>
-      </td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = pedidos.map(p => {
-    const badgeEstado =
-      p.estado === 'entregado' ? 'badge-success' :
-        p.estado === 'en_camino' ? 'badge-info' :
-          p.estado === 'pendiente' ? 'badge-warning' :
-            p.estado === 'cancelado' ? 'badge-danger' : 'badge-neutral';
-
-    const labelEstado =
-      p.estado === 'entregado' ? 'Entregado' :
-        p.estado === 'en_camino' ? 'En camino' :
-          p.estado === 'pendiente' ? 'Pendiente' :
-            p.estado === 'cancelado' ? 'Cancelado' : p.estado;
-
-    return `
-      <tr>
-        <td>${p.id}</td>
-        <td>${p.cliente}</td>
-        <td>${p.fecha}</td>
-        <td>${p.total}</td>
-        <td>${p.pago}</td>
-        <td><span class="badge ${badgeEstado}">${labelEstado}</span></td>
-        <td>
-          <button class="btn btn-sm btn-outline"><i class="ti ti-eye"></i><span>Ver</span></button>
-        </td>
-      </tr>`;
-  }).join('');
-
-  inyectarDataLabels('pedidos-tbody');
 }
 
 // ==========================================
-// CLIENTES Y NEWSLETTER
+// MODAL DE PRODUCTO (CONECTADO A GET /api/v1/productos/:id)
 // ==========================================
+async function abrirModalProducto(id = null) {
+  const modal = document.getElementById('modal-producto');
+  document.getElementById('form-producto').reset();
 
-async function cargarClientes() {
-  const tbody = document.getElementById('clientes-tbody');
-  tbody.innerHTML = `
-    <tr><td colspan="6">
-      <div class="empty-state">
-        <i class="ti ti-loader"></i>Cargando clientes...
-      </div>
-    </td></tr>`;
+  if (id) {
+    document.getElementById('modal-producto-titulo').textContent = 'Editar Producto #' + id;
+
+    // Intentamos primero desde la memoria para respuesta inmediata
+    let p = catalogoMemoria.find(prod => prod.id === id);
+
+    // Si no está en memoria o queremos datos frescos, consultamos la API
+    if (!p) {
+      try {
+        const res = await fetch(`/api/v1/productos/${id}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        p = await res.json();
+      } catch (error) {
+        console.error('Error al cargar producto:', error);
+        mostrarToast('No se pudo cargar el producto', 'ti-plug-connected-x');
+        return;
+      }
+    }
+
+    document.getElementById('prod-id').value = p.id;
+    document.getElementById('prod-nombre').value = p.nombre;
+    document.getElementById('prod-descripcion').value = p.descripcion || '';
+    document.getElementById('prod-categoria').value = p.categoria_id || '';
+    document.getElementById('prod-precio').value = p.precio;
+    document.getElementById('prod-imagen').value = p.imagen_principal || '';
+    document.getElementById('prod-destacado').checked = p.destacado;
+    document.getElementById('prod-activo').checked = p.activo;
+
+  } else {
+    document.getElementById('modal-producto-titulo').textContent = 'Nuevo Producto';
+    document.getElementById('prod-id').value = '';
+    document.getElementById('prod-destacado').checked = false;
+    document.getElementById('prod-activo').checked = true;
+  }
+
+  modal.classList.add('abierto');
+}
+
+function cerrarModal(idModal, event) {
+  if (!event || event.target === document.getElementById(idModal)) {
+    document.getElementById(idModal).classList.remove('abierto');
+  }
+}
+
+async function guardarProducto() {
+  const id = document.getElementById('prod-id').value;
+
+  const body = {
+    nombre:      document.getElementById('prod-nombre').value.trim(),
+    descripcion: document.getElementById('prod-descripcion').value.trim(),
+    categoria_id: Number(document.getElementById('prod-categoria').value) || null,
+    precio:      Number(document.getElementById('prod-precio').value),
+    imagen_principal: document.getElementById('prod-imagen').value.trim() || null,
+    destacado:   document.getElementById('prod-destacado').checked,
+    activo:      document.getElementById('prod-activo').checked,
+  };
+
+  const url    = id ? `/api/v1/productos/${id}` : '/api/v1/productos';
+  const method = id ? 'PUT' : 'POST';
 
   try {
-    const response = await fetch('/api/admin/clientes');
-    const clientes = await response.json();
-    renderizarClientes(clientes);
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.mensaje || `HTTP ${res.status}`);
+    }
+
+    mostrarToast(id ? 'Producto actualizado' : 'Producto creado', 'ti-device-floppy');
+    cerrarModal('modal-producto');
+    await cargarCatalogoDesdeBD(); // recargamos la tabla con los datos frescos
   } catch (error) {
-    tbody.innerHTML = `
-      <tr><td colspan="6">
-        <div class="empty-state">
-          <i class="ti ti-plug-connected-x"></i>
-          Esperando conexión con el backend...
-        </div>
-      </td></tr>`;
+    console.error('Error al guardar producto:', error);
+    mostrarToast(`Error: ${error.message}`, 'ti-alert-triangle');
   }
-}
-
-function renderizarClientes(clientes) {
-  const tbody = document.getElementById('clientes-tbody');
-  if (!clientes.length) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="ti ti-users"></i>No hay clientes registrados</div></td></tr>`;
-    return;
-  }
-  // Acá dibujaríamos el HTML con map() cuando lleguen los datos, igual que en productos.
-  inyectarDataLabels('clientes-tbody');
-}
-
-async function cargarNewsletter() {
-  const tbody = document.getElementById('newsletter-tbody');
-  tbody.innerHTML = `
-    <tr><td colspan="5">
-      <div class="empty-state">
-        <i class="ti ti-loader"></i>Cargando suscriptores...
-      </div>
-    </td></tr>`;
-
-  try {
-    const response = await fetch('/api/admin/newsletter');
-    const suscriptores = await response.json();
-    renderizarNewsletter(suscriptores);
-  } catch (error) {
-    tbody.innerHTML = `
-      <tr><td colspan="5">
-        <div class="empty-state">
-          <i class="ti ti-plug-connected-x"></i>
-          Esperando conexión con el backend...
-        </div>
-      </td></tr>`;
-  }
-}
-
-function renderizarNewsletter(suscriptores) {
-  const tbody = document.getElementById('newsletter-tbody');
-  if (!suscriptores.length) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="ti ti-mail-off"></i>No hay suscriptores aún</div></td></tr>`;
-    return;
-  }
-  // Acá dibujaríamos el HTML con map() cuando lleguen los datos.
-  inyectarDataLabels('newsletter-tbody');
 }
 
 // ==========================================
-// INIT
+// MÓDULOS EN ESPERA DE BACKEND (STUBS)
+// ==========================================
+function mostrarCargando(idTbody) {
+  document.getElementById(idTbody).innerHTML = `<tr><td colspan="10" style="text-align:center; padding:20px; color:var(--txt-3);"><i class="ti ti-loader"></i> Esperando conexión con la API...</td></tr>`;
+}
+
+async function cargarPedidosDesdeBD() { mostrarCargando('pedidos-tbody'); }
+async function cargarClientesDesdeBD() { mostrarCargando('clientes-tbody'); }
+async function cargarNewsletterDesdeBD() { mostrarCargando('newsletter-tbody'); }
+async function cargarDashboardDesdeBD() { /* Los KPIs mostrarán '...' hasta que se arme la API */ }
+
+// ==========================================
+// INICIO AUTOMÁTICO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btn-menu')
-    ?.addEventListener('click', abrirSidebar);
-
-  document.querySelector('.sidebar-overlay')
-    ?.addEventListener('click', cerrarSidebar);
-
+  document.getElementById('topbar-fecha').textContent = new Date().toLocaleDateString('es-AR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
   navegarA('dashboard');
 });
