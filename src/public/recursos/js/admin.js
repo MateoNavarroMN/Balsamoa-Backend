@@ -50,7 +50,7 @@ async function cargarCatalogoDesdeBD() {
   tbody.innerHTML = `<tr><td colspan="8"><div style="text-align:center; padding:20px; color:var(--txt-3);"><i class="ti ti-loader"></i> Cargando productos...</div></td></tr>`;
 
   try {
-    const response = await fetch('/api/v1/productos');
+    const response = await fetch('/api/v1/admin/productos');
     const productos = await response.json();
 
     // Si la BD devuelve error
@@ -154,7 +154,7 @@ function renderizarCatologoHTML(productos) {
 }
 
 // ==========================================
-// MODAL DE PRODUCTO (CONECTADO A GET /api/v1/productos/:id)
+// MODAL DE PRODUCTO (CONECTADO A GET /api/v1/admin/productos/:id)
 // ==========================================
 async function abrirModalProducto(id = null) {
   const modal = document.getElementById('modal-producto');
@@ -169,7 +169,7 @@ async function abrirModalProducto(id = null) {
     // Si no está en memoria o queremos datos frescos, consultamos la API
     if (!p) {
       try {
-        const res = await fetch(`/api/v1/productos/${id}`);
+        const res = await fetch(`/api/v1/admin/productos/${id}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         p = await res.json();
       } catch (error) {
@@ -217,7 +217,7 @@ async function guardarProducto() {
     activo:      document.getElementById('prod-activo').checked,
   };
 
-  const url    = id ? `/api/v1/productos/${id}` : '/api/v1/productos';
+  const url    = id ? `/api/v1/admin/productos/${id}` : '/api/v1/admin/productos';
   const method = id ? 'PUT' : 'POST';
 
   try {
