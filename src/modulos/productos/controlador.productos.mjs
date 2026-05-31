@@ -3,52 +3,167 @@ import * as modelo from "./modelo.productos.mjs"
 // ---> Admin (CRUD)
 
 // Lectura 
-export async function obtenerProductos(req, res){
+export async function obtenerProductos(req, res) {
     const productos = await modelo.obtenerProductos()
 
-    if(productos.length === 0){
-        return res.status(404).json({ mensaje: 'Registros no encontrados'})
+    if (productos.length === 0) {
+        return res.status(404).json({ mensaje: 'Productos no encontrados' })
     }
 
     res.json(productos)
 }
 
-export async function obtenerProductoPorId(req, res){
+export async function obtenerProductoPorId(req, res) {
     const id = Number(req.params.id)
     const productos = await modelo.obtenerProductoPorId(id)
 
     if(productos.length === 0){
-        return res.status(400).json({ mensaje: 'Registro no encontrado'})
+        return res.status(400).json({ mensaje: 'Producto no encontrado'})
     }
 
     res.json(productos)
 }
 
-// ALTA
+// ALTA (Agregado lógico o físico)
 export async function crearProducto(req, res) {
     // Acá en el futuro irá la lógica para el INSERT INTO
-    res.status(201).json({ mensaje: 'Endpoint de creación (Alta) en desarrollo' });
+    res.status(201).json({ mensaje: 'Endpoint de creación (Alta) en desarrollo' })
+}
+
+export async function activarProducto(req, res) {
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+        return res.status(400).json({ mensaje: 'El ID del producto debe ser un número válido' })
+    }
+
+    const resultado = await modelo.activarProducto(id)
+    if (resultado.error) {
+        return res.status(500).json({ mensaje: 'Error al activar el producto' })
+    }
+
+    if (resultado.length === 0) {
+        return res.status(404).json({ mensaje: 'Producto no encontrado' })
+    }
+
+    res.status(200).json({
+            mensaje: 'Producto agregado exitosamente (alta lógica)',
+            producto: resultado
+        })
 }
 
 // MODIFICACIÓN (Actualizar)
 export async function actualizarProducto(req, res) {
-    // Acá en el futuro irá la lógica para el UPDATE
-    res.status(200).json({ mensaje: 'Endpoint de actualización (Modificación) en desarrollo' });
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+        return res.status(400).json({ mensaje: 'El ID del producto debe ser un número válido' })
+    }
+
+    const { nombre, descripcion, precio, categoria_id, destacado, imagenes, variantes } = req.body
+    // Validaciones de tipos
+    if (precio !== undefined && (isNaN(Number(precio)) || Number(precio) < 0)) {
+        return res.status(400).json({ mensaje: 'El precio debe ser un número positivo' })
+    }
+
+    if (imagenes !== undefined && !Array.isArray(imagenes)) {
+        return res.status(400).json({ mensaje: 'El campo "imagenes" debe ser un arreglo' })
+    }
+
+    // Usamos for...of para que el return corte la función principal
+    if (imagenes) {
+        for (const img of imagenes) {
+            if (!img.url || typeof img.url !== 'string') {
+                return res.status(400).json({ mensaje: 'Cada imagen debe tener un campo "url" válido' })
+            }
+        }
+    }
+
+    if (variantes !== undefined && !Array.isArray(variantes)) {
+        return res.status(400).json({ mensaje: 'El campo "variantes" debe ser un arreglo' })
+    }
+
+    if (variantes) {
+        for (const v of variantes) {
+            if (!v.talle_id || !v.color_id) {
+                return res.status(400).json({ mensaje: 'Cada variante debe tener "talle_id" y "color_id"' })
+            }
+            if (v.stock !== undefined && (isNaN(Number(v.stock)) || Number(v.stock) < 0)) {
+                return res.status(400).json({ mensaje: 'El stock de cada variante debe ser un número no negativo' })
+            }
+        }
+    }
+
+    const resultado = await modelo.actualizarProducto(id, { nombre, descripcion, precio, categoria_id, destacado, imagenes, variantes })
+
+    if (resultado.error) {
+        return res.status(500).json({ mensaje: 'Error al actualizar el producto' })
+    }
+
+    if (resultado.length === 0) {
+        return res.status(404).json({ mensaje: 'Producto no encontrado' })
+    }
+
+    res.status(200).json({
+            mensaje: 'Producto actualizado exitosamente',
+            producto: resultado
+        })
 }
 
 // BAJA (Eliminar lógica o física)
 export async function eliminarProducto(req, res) {
-    // Acá en el futuro irá la lógica para el UPDATE
-    res.status(200).json({ mensaje: 'Endpoint de eliminación (Baja) en desarrollo' });
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+        return res.status(400).json({ mensaje: 'El ID del producto debe ser un número válido' })
+    }
+
+    const resultado = await modelo.eliminarProducto(id)
+    if (resultado.error) {
+        // Código 23503 en PostgreSQL significa "Violación de llave foránea"
+        if (resultado.code === '23503') {
+            return res.status(409).json({
+                mensaje: 'No se puede eliminar definitivamente porque el producto ya tiene ventas registradas. Te recomendamos desactivarlo (baja lógica).'
+            });
+        }
+        return res.status(500).json({ mensaje: 'Error al intentar eliminar' });
+    }
+
+    if (resultado.length === 0) {
+        return res.status(404).json({ mensaje: 'Producto no encontrado' })
+    }
+
+    res.status(200).json({
+            mensaje: 'Producto eliminado definitivamente de la base de datos',
+            producto: resultado
+        })
+}
+
+export async function desactivarProducto(req, res) {
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+        return res.status(400).json({ mensaje: 'El ID del producto debe ser un número válido' })
+    }
+
+    const resultado = await modelo.desactivarProducto(id)
+    if (resultado.error) {
+        return res.status(500).json({ mensaje: 'Error al desactivar el producto' })
+    }
+
+    if (resultado.length === 0) {
+        return res.status(404).json({ mensaje: 'Producto no encontrado' })
+    }
+
+    res.status(200).json({
+            mensaje: 'Producto eliminado exitosamente (baja lógica)',
+            producto: resultado
+        })
 }
 
 // ---> Publicos (Lectura)
 export async function obtenerProductosPublicos(req, res) {
     // A futuro: traerá solo productos activos, sin info sensible de stock crítico, etc.
-    res.status(200).json({ mensaje: 'Endpoint público de catálogo en desarrollo' });
+    res.status(200).json({ mensaje: 'Endpoint público de catálogo en desarrollo' })
 }
 
 export async function obtenerProductoPublicoPorId(req, res) {
     // A futuro: traerá el detalle de un solo producto para la vista de compra
-    res.status(200).json({ mensaje: 'Endpoint público de detalle de producto en desarrollo' });
+    res.status(200).json({ mensaje: 'Endpoint público de detalle de producto en desarrollo' })
 }

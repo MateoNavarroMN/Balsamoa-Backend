@@ -15,13 +15,4 @@ const pool = new Pool({
   }
 })
 
-// Probar la conexión al iniciar
-pool.on('connect', () => {
-  console.log('Conectado exitosamente a la base de datos en Supabase')
-})
-
-pool.on('error', (error) => {
-  console.error('Error inesperado en la base de datos:', error)
-})
-
 export default pool
