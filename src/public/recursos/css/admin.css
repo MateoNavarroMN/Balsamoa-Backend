@@ -626,3 +626,335 @@ table.tbl tbody tr:hover td {
 .filter-bar select:focus {
     border-color: var(--brand);
 }
+
+/* ==========================================
+   MODAL GRANDE Y SECCIONES INTERNAS
+   ========================================== */
+.modal-caja-lg {
+    max-width: 640px;
+}
+
+.modal-seccion-titulo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--txt-3);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+}
+
+.form-req {
+    color: var(--danger);
+    margin-left: 2px;
+}
+
+/* ── Chips de talles y colores ── */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    background: var(--bg-app);
+    border-radius: 8px;
+    min-height: 44px;
+    align-items: center;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 2px solid var(--border-strong);
+    background: var(--bg-card);
+    color: var(--txt-2);
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+}
+
+.chip:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+}
+
+.chip.chip-activo {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: #fff;
+}
+
+.chip-color-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .4);
+    flex-shrink: 0;
+}
+
+/* ── Filas de imágenes ── */
+.imagen-fila {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.imagen-fila .form-control {
+    flex: 1;
+}
+
+.imagen-orden {
+    font-size: 11px;
+    color: var(--txt-3);
+    font-weight: 600;
+    min-width: 18px;
+    text-align: right;
+}
+
+.btn-quitar-imagen {
+    background: none;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--txt-3);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .15s;
+}
+
+.btn-quitar-imagen:hover {
+    background: var(--danger-bg);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+/* ── Tabla de stock por variante ── */
+.stock-variante-input {
+    width: 70px;
+    padding: 5px 8px;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ── Fila de imagen: ajuste del botón de subida ── */
+.imagen-fila label.btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+/* ==========================================
+   RESPONSIVE — MOBILE FIRST
+   ========================================== */
+
+/* ── Overlay del drawer ── */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    z-index: 49;
+    backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.visible {
+    display: block;
+}
+
+/* ── Botón hamburguesa (solo mobile) ── */
+.btn-menu {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    color: var(--txt-2);
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.btn-menu:hover {
+    background: var(--bg-hover);
+    color: var(--txt-1);
+}
+
+@media (max-width: 768px) {
+
+    /* ── Layout general ── */
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    /* ── Sidebar se convierte en drawer ── */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        width: 260px;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, .15);
+    }
+
+    .sidebar.drawer-abierto {
+        transform: translateX(0);
+    }
+
+    /* ── Topbar mobile ── */
+    .topbar {
+        position: sticky;
+        top: 0;
+        padding: 0 16px;
+        gap: 10px;
+    }
+
+    .btn-menu {
+        display: flex;
+    }
+
+    .topbar-title {
+        flex: 1;
+        font-size: 14px;
+    }
+
+    .topbar-fecha {
+        display: none;
+    }
+
+    /* ── Content ── */
+    .content-area {
+        padding: 14px 12px;
+    }
+
+    /* ── KPI grid: 2 columnas en mobile ── */
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .kpi-value {
+        font-size: 20px;
+    }
+
+    /* ── Filtros: apilados ── */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-bar select {
+        width: 100%;
+    }
+
+    /* ── Section header ── */
+    .section-header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* ── Tabla del catálogo: se convierte en tarjetas ── */
+    /* Ocultamos la tabla real */
+    #section-catalogo .tbl thead {
+        display: none;
+    }
+
+    #section-catalogo .tbl,
+    #section-catalogo .tbl tbody,
+    #section-catalogo .tbl tr,
+    #section-catalogo .tbl td {
+        display: block;
+        width: 100%;
+    }
+
+    #section-catalogo .tbl tr {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 12px;
+        background: var(--bg-card);
+        box-shadow: var(--shadow);
+        white-space: normal;
+    }
+
+    #section-catalogo .tbl td {
+        padding: 4px 0;
+        border: none;
+        font-size: 13px;
+    }
+
+    /* Etiqueta de cada celda generada por data-label en JS */
+    #section-catalogo .tbl td[data-label]::before {
+        content: attr(data-label) ": ";
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--txt-3);
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    /* La primera celda (producto) no necesita etiqueta */
+    #section-catalogo .tbl td:first-child::before {
+        display: none;
+    }
+
+    /* Acciones al final, en fila */
+    #section-catalogo .tbl td:last-child {
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+        margin-top: 6px;
+    }
+
+    /* ── Modal: pantalla completa ── */
+    .modal-caja,
+    .modal-caja-lg {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100dvh;
+        height: 100dvh;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .modal-overlay {
+        align-items: flex-end;
+    }
+
+    /* ── Tabla de stock en modal: scroll horizontal ── */
+    #prod-stock-tabla {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ── Grid de precio/categoría: una columna ── */
+    .modal-body [style*="grid-template-columns:1fr 1fr"] {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0 !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kpi-value {
+        font-size: 18px;
+    }
+}

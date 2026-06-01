@@ -11,8 +11,12 @@ rutasProductos.get('/api/v1/admin/productos/:id', controlador.obtenerProductoPor
 // ALTA (POST)
 rutasProductos.post('/api/v1/admin/productos', controlador.crearProducto)
 
-// MODIFICACIÓN (PUT / PATCH)
+// MODIFICACIÓN (PUT)
 rutasProductos.put('/api/v1/admin/productos/:id', controlador.actualizarProducto)
+
+// BAJA Y ALTA LOGICA
+rutasProductos.patch('/api/v1/admin/productos/:id/desactivar', controlador.desactivarProducto)
+rutasProductos.patch('/api/v1/admin/productos/:id/activar', controlador.activarProducto)
 
 // BAJA (DELETE)
 rutasProductos.delete('/api/v1/admin/productos/:id', controlador.eliminarProducto)

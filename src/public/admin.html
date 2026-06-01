@@ -15,8 +15,9 @@
 
 <body>
 
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="cerrarDrawer()"></div>
   <div class="admin-layout">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <a class="sidebar-logo" href="#">
         <div class="sidebar-logo-icon" style="background: transparent;">
           <img src="./recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa"
@@ -28,24 +29,24 @@
         </div>
       </a>
       <nav class="sidebar-nav">
-        <div class="nav-group-label">Principal</div>
-        <div class="nav-item active" id="nav-dashboard" onclick="navegarA('dashboard')">
+        <!-- <div class="nav-group-label">Principal</div> -->
+        <!-- <div class="nav-item active" id="nav-dashboard" onclick="navegarA('dashboard')">
           <i class="ti ti-layout-dashboard"></i><span>Dashboard</span>
-        </div>
-        <div class="nav-item" id="nav-pedidos" onclick="navegarA('pedidos')">
+        </div> -->
+        <!-- <div class="nav-item" id="nav-pedidos" onclick="navegarA('pedidos')">
           <i class="ti ti-shopping-bag"></i><span>Pedidos</span>
-        </div>
+        </div> -->
         <div class="nav-group-label" style="margin-top:8px">Catálogo</div>
         <div class="nav-item" id="nav-catalogo" onclick="navegarA('catalogo')">
           <i class="ti ti-hanger"></i><span>Productos</span>
         </div>
-        <div class="nav-group-label" style="margin-top:8px">Comunidad</div>
+        <!-- <div class="nav-group-label" style="margin-top:8px">Comunidad</div>
         <div class="nav-item" id="nav-clientes" onclick="navegarA('clientes')">
           <i class="ti ti-users"></i><span>Clientes</span>
         </div>
         <div class="nav-item" id="nav-newsletter" onclick="navegarA('newsletter')">
           <i class="ti ti-mail"></i><span>Newsletter</span>
-        </div>
+        </div> -->
       </nav>
       <div class="sidebar-footer">
         <div class="user-avatar">AD</div>
@@ -60,6 +61,7 @@
 
     <div class="main-area">
       <header class="topbar">
+        <button class="btn-menu" onclick="abrirDrawer()" title="Menú"><i class="ti ti-menu-2"></i></button>
         <span class="topbar-title" id="topbar-titulo">Dashboard</span>
         <span class="topbar-fecha" id="topbar-fecha"></span>
       </header>
@@ -70,7 +72,7 @@
           <span id="toast-mensaje"></span>
         </div>
 
-        <div class="section active" id="section-dashboard">
+        <!-- <div class="section active" id="section-dashboard">
           <div class="kpi-grid">
             <div class="kpi-card">
               <div class="kpi-label"><i class="ti ti-currency-dollar"></i>Ventas del mes</div>
@@ -95,9 +97,9 @@
               Los gráficos se activarán cuando se conecte el módulo de reportes.
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="section" id="section-pedidos">
+        <!-- <div class="section" id="section-pedidos">
           <div class="section-header">
             <h2 class="section-title">Pedidos</h2>
           </div>
@@ -120,9 +122,9 @@
               </table>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="section" id="section-catalogo">
+        <div class="section active" id="section-catalogo">
           <div class="section-header">
             <h2 class="section-title">Catálogo de productos</h2>
             <button class="btn btn-primary" onclick="abrirModalProducto()">
@@ -171,7 +173,7 @@
           </div>
         </div>
 
-        <div class="section" id="section-clientes">
+        <!-- <div class="section" id="section-clientes">
           <div class="section-header">
             <h2 class="section-title">Clientes</h2>
           </div>
@@ -192,9 +194,9 @@
               </table>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="section" id="section-newsletter">
+        <!-- <div class="section" id="section-newsletter">
           <div class="section-header">
             <h2 class="section-title">Newsletter</h2>
           </div>
@@ -214,14 +216,14 @@
               </table>
             </div>
           </div>
-        </div>
+        </div> -->
 
       </main>
     </div>
   </div>
 
   <div class="modal-overlay" id="modal-producto" onclick="cerrarModal('modal-producto', event)">
-    <div class="modal-caja" onclick="event.stopPropagation()">
+    <div class="modal-caja modal-caja-lg" onclick="event.stopPropagation()">
       <div class="modal-header">
         <span class="modal-titulo" id="modal-producto-titulo">Nuevo Producto</span>
         <button class="modal-cerrar" onclick="cerrarModal('modal-producto')"><i class="ti ti-x"></i></button>
@@ -229,54 +231,81 @@
       <div class="modal-body">
         <form id="form-producto">
           <input type="hidden" id="prod-id">
+
+          <!-- ── SECCIÓN: Información básica ── -->
+          <div class="modal-seccion-titulo">Información básica</div>
+
           <div class="form-group">
-            <label class="form-label">Nombre del producto</label>
+            <label class="form-label">Nombre del producto <span class="form-req">*</span></label>
             <input type="text" id="prod-nombre" class="form-control" placeholder="Ej: Remera Oversize" required>
           </div>
           <div class="form-group">
             <label class="form-label">Descripción</label>
-            <textarea id="prod-descripcion" class="form-control" rows="3" style="resize: vertical;"
+            <textarea id="prod-descripcion" class="form-control" rows="3" style="resize:vertical;"
               placeholder="Detalles de tela, calce, cuidados..."></textarea>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
             <div class="form-group">
-              <label class="form-label">Categoría</label>
+              <label class="form-label">Categoría <span class="form-req">*</span></label>
               <select id="prod-categoria" class="form-control" required>
                 <option value="">Seleccionar...</option>
-                <option value="1">Remeras</option>
-                <option value="2">Buzos</option>
-                <option value="3">Camperas</option>
-                <option value="4">Pantalones</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Precio ($)</label>
-              <input type="number" id="prod-precio" class="form-control" placeholder="Ej: 15000" required>
+              <label class="form-label">Precio ($) <span class="form-req">*</span></label>
+              <input type="number" id="prod-precio" class="form-control" placeholder="Ej: 15000" min="0" required>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">URL de Imagen Principal</label>
-            <input type="text" id="prod-imagen" class="form-control" placeholder="https://...">
-          </div>
-          <div
-            style="display: flex; gap: 20px; margin-top: 10px; padding: 10px; background: var(--bg-app); border-radius: 8px;">
-            <label
-              style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: 500;">
-              <input type="checkbox" id="prod-destacado" style="accent-color: var(--brand); width: 16px; height: 16px;">
+          <div style="display:flex; gap:20px; padding:10px; background:var(--bg-app); border-radius:8px;">
+            <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; font-weight:500;">
+              <input type="checkbox" id="prod-destacado" style="accent-color:var(--brand); width:16px; height:16px;">
               Destacado
             </label>
-            <label
-              style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: 500;">
+            <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; font-weight:500;">
               <input type="checkbox" id="prod-activo" checked
-                style="accent-color: var(--success); width: 16px; height: 16px;"> Activo (Visible)
+                style="accent-color:var(--success); width:16px; height:16px;">
+              Activo (Visible)
             </label>
           </div>
+
+          <!-- ── SECCIÓN: Imágenes ── -->
+          <div class="modal-seccion-titulo" style="margin-top:20px;">Imágenes</div>
+          <div class="form-label" style="margin-bottom:8px; color:var(--txt-3); font-weight:400;">
+            La primera imagen será la principal. Podés agregar hasta 6.
+          </div>
+          <div id="prod-imagenes-lista" style="display:flex; flex-direction:column; gap:8px;"></div>
+          <button type="button" class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="agregarFilaImagen()">
+            <i class="ti ti-plus"></i> Agregar imagen
+          </button>
+
+          <!-- ── SECCIÓN: Talles ── -->
+          <div class="modal-seccion-titulo" style="margin-top:20px;">Talles disponibles</div>
+          <div id="prod-talles-chips" class="chips-container">
+            <span style="color:var(--txt-3); font-size:12px;"><i class="ti ti-loader"></i> Cargando...</span>
+          </div>
+
+          <!-- ── SECCIÓN: Colores ── -->
+          <div class="modal-seccion-titulo" style="margin-top:20px;">Colores disponibles</div>
+          <div id="prod-colores-chips" class="chips-container">
+            <span style="color:var(--txt-3); font-size:12px;"><i class="ti ti-loader"></i> Cargando...</span>
+          </div>
+
+          <!-- ── SECCIÓN: Stock por variante ── -->
+          <div class="modal-seccion-titulo" style="margin-top:20px;">Stock por variante</div>
+          <div id="prod-stock-tabla">
+            <p style="color:var(--txt-3);font-size:12px;text-align:center;padding:12px 0;">
+              Seleccioná al menos un talle y un color para asignar stock.
+            </p>
+          </div>
+
         </form>
       </div>
       <div class="modal-footer"
-        style="padding: 18px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-surface);">
+        style="padding:18px 22px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px; background:var(--bg-surface);">
         <button class="btn btn-outline" onclick="cerrarModal('modal-producto')">Cancelar</button>
-        <button class="btn btn-primary" onclick="guardarProducto()">Guardar Producto</button>
+        <button class="btn btn-primary" onclick="guardarProducto()">
+          <i class="ti ti-device-floppy"></i> Guardar Producto
+        </button>
       </div>
     </div>
   </div>
