@@ -31,7 +31,81 @@ export async function obtenerProductoPorId(id) {
     }
 }
 
-// ALTA (Agregado lógico o físico)
+
+
+// ALTA Agregado lógico o físico
+
+export async function crearProducto(datos) {
+    const {
+        nombre, descripcion, precio, categoria_id,
+        destacado, activo,
+        imagenes,  
+        variantes  
+    } = datos
+
+    // Pedimos una conexión dedicada al pool para manejar la transacción de forma segura
+    const client = await pool.connect()
+
+    try {
+        // Iniciamos la transacción en Supabase (PostgreSQL)
+        await client.query('BEGIN')
+
+        
+        const resultadoProducto = await client.query(
+            `INSERT INTO productos (nombre, descripcion, precio, categoria_id, destacado, activo)
+             VALUES ($1, $2, $3, $4, $5, $6)
+             RETURNING *`,
+            [
+                nombre,
+                descripcion || null,
+                precio,
+                categoria_id,
+                destacado ?? false,
+                activo ?? true
+            ]
+        )
+
+      
+        const nuevoProducto = resultadoProducto.rows[0]
+        const nuevoProductoId = nuevoProducto.id
+
+        //  Si hay imágenes, las insertamos asociadas a ese nuevo ID
+        if (Array.isArray(imagenes) && imagenes.length > 0) {
+            for (const img of imagenes) {
+                await client.query(
+                    `INSERT INTO producto_imagenes (producto_id, url, orden)
+                     VALUES ($1, $2, $3)`,
+                    [nuevoProductoId, img.url, img.orden ?? 1]
+                )
+            }
+        }
+
+        //  Si hay variantes (talle, color, stock), las registramos en su tabla
+        if (Array.isArray(variantes) && variantes.length > 0) {
+            for (const v of variantes) {
+                await client.query(
+                    `INSERT INTO variantes (producto_id, talle_id, color_id, stock, activo)
+                     VALUES ($1, $2, $3, $4, $5)`,
+                    [nuevoProductoId, v.talle_id, v.color_id, v.stock ?? 0, v.activo ?? true]
+                )
+            }
+        }
+
+        
+        await client.query('COMMIT')
+        return nuevoProducto
+
+    } catch (error) {
+        // Si algo falló (ej: clave foránea inválida), deshacemos todo para no dejar datos huérfanos
+        await client.query('ROLLBACK')
+        console.error('Error en transacción al crear producto:', error)
+        return { error: error.message, code: error.code }
+    } finally {
+        // Relevamos/soltamos el cliente para que vuelva al pool de conexiones
+        client.release()
+    }
+}
+
 // export async function crearProducto(id, datos) {}
 
 export async function activarProducto(id) {
