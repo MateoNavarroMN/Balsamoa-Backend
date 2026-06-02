@@ -26,8 +26,67 @@ export async function obtenerProductoPorId(req, res) {
 
 // ALTA (Agregado lógico o físico)
 export async function crearProducto(req, res) {
-    // Acá en el futuro irá la lógica para el INSERT INTO
-    res.status(201).json({ mensaje: 'Endpoint de creación (Alta) en desarrollo' })
+    const { nombre, descripcion, precio, categoria_id, destacado, imagenes, variantes } = req.body
+
+    // ---> VALIDACIONES DE CAMPOS OBLIGATORIOS 
+    if (!nombre || typeof nombre !== 'string' || nombre.trim() === '') {
+        return res.status(400).json({ mensaje: 'El nombre es obligatorio y debe ser un texto válido' })
+    }
+
+    if (precio === undefined || isNaN(Number(precio)) || Number(precio) <= 0) {
+        return res.status(400).json({ mensaje: 'El precio es obligatorio y debe ser un número positivo' })
+    }
+
+    if (!categoria_id || isNaN(Number(categoria_id))) {
+        return res.status(400).json({ mensaje: 'La categoría (categoria_id) es obligatoria y debe ser un número' })
+    }
+
+    // ---> VALIDACIONES DE ESTRUCTURAS 
+    if (imagenes !== undefined && !Array.isArray(imagenes)) {
+        return res.status(400).json({ mensaje: 'El campo "imagenes" debe ser un arreglo' })
+    }
+
+    if (imagenes) {
+        for (const img of imagenes) {
+            if (!img.url || typeof img.url !== 'string') {
+                return res.status(400).json({ mensaje: 'Cada imagen debe tener un campo "url" válido' })
+            }
+        }
+    }
+
+    if (variantes !== undefined && !Array.isArray(variantes)) {
+        return res.status(400).json({ mensaje: 'El campo "variantes" debe ser un arreglo' })
+    }
+
+    if (variantes) {
+        for (const v of variantes) {
+            if (!v.talle_id || !v.color_id) {
+                return res.status(400).json({ mensaje: 'Cada variante debe tener obligatoriamente "talle_id" y "color_id"' })
+            }
+            if (v.stock !== undefined && (isNaN(Number(v.stock)) || Number(v.stock) < 0)) {
+                return res.status(400).json({ mensaje: 'El stock de cada variante debe ser un número no negativo' })
+            }
+        }
+    }
+
+    // Llamamos al modelo pasándole los datos limpios
+    const resultado = await modelo.crearProducto(req.body)
+
+    // ---> MANEJO DE ERRORES DE BASE DE DATOS
+    if (resultado.error) {
+        // Código 23503 en PostgreSQL indica Violación de Llave Foránea 
+        // (Intentaron meter un categoria_id, talle_id o color_id que no existe en sus respectivas tablas)
+        if (resultado.code === '23503') {
+            return res.status(400).json({ mensaje: 'Error de consistencia: La categoría, talle o color especificado no existen' })
+        }
+        return res.status(500).json({ mensaje: 'Error interno en el servidor al intentar crear el producto' })
+    }
+
+    
+    res.status(201).json({
+        mensaje: 'Producto creado exitosamente junto con sus imágenes y variantes',
+        producto: resultado
+    })
 }
 
 export async function activarProducto(req, res) {
