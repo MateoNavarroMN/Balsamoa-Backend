@@ -6,8 +6,12 @@ import * as modelo from "./modelo.productos.mjs"
 export async function obtenerProductos(req, res) {
     const productos = await modelo.obtenerProductos()
 
+    if (productos.error) {
+        return res.status(500).json({ mensaje: 'Error al obtener productos', detalle: productos.error })
+    }
+
     if (productos.length === 0) {
-        return res.status(404).json({ mensaje: 'Productos no encontrados' })
+        return res.status(200).json([])
     }
 
     res.json(productos)
@@ -218,11 +222,60 @@ export async function desactivarProducto(req, res) {
 
 // ---> Publicos (Lectura)
 export async function obtenerProductosPublicos(req, res) {
-    // A futuro: traerá solo productos activos, sin info sensible de stock crítico, etc.
-    res.status(200).json({ mensaje: 'Endpoint público de catálogo en desarrollo' })
+    const destacados = req.query.destacados === 'true'
+    const productos = await modelo.obtenerProductosPublicos(destacados)
+
+    if (productos.error) {
+        return res.status(500).json({ mensaje: 'Error al obtener el catálogo' })
+    }
+    if (productos.length === 0) {
+        return res.status(200).json([])
+    }
+
+    res.json(productos.map(limpiarCampos))
 }
 
 export async function obtenerProductoPublicoPorId(req, res) {
-    // A futuro: traerá el detalle de un solo producto para la vista de compra
-    res.status(200).json({ mensaje: 'Endpoint público de detalle de producto en desarrollo' })
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+        return res.status(400).json({ mensaje: 'El ID del producto debe ser un número válido' })
+    }
+
+    const producto = await modelo.obtenerProductoPublicoPorId(id)
+
+    if (producto.error) {
+        return res.status(500).json({ mensaje: 'Error al obtener el producto' })
+    }
+    if (!producto) {
+        return res.status(404).json({ mensaje: 'Producto no encontrado o no disponible' })
+    }
+
+    res.json(limpiarCampos(producto))
+}
+
+// Transforma el stock total a un string para la tienda publica
+function censuraStock(stockTotal){
+    const stock = Number(stockTotal)
+    if(stock === 0) return 'Agotado'
+    if(stock <= 3) return 'Últimas unidades'
+
+    return 'Disponible'
+}
+
+// Limpia los campos sensibles antes de enviar un producto a la tienda
+function limpiarCampos(producto){
+    const { stock_total, stock_por_talle, talle_ids, color_ids, variantes, activo, ...resto } = producto
+
+    const tallesSeguros = (stock_por_talle || []).map((st)=>{
+        return {
+            talle: st.talle,
+            tieneStock: st.cantidad > 0
+        }
+    })
+
+    return {
+        ...resto,
+        disponibilidad: censuraStock(stock_total),
+        stock_por_talle: tallesSeguros
+    }
 }
