@@ -1,12 +1,14 @@
 import pool from "../../config/conexion.bd.mjs"
 
+// ---> Admin (CRUD)
+
 // Lectura
 export async function obtenerProductos() {
     try {
         // Consultamos directamente la vista que armamos
         const resultado = await pool.query(`
             SELECT * FROM vista_catalogo_productos 
-            ORDER BY id ASC
+            ORDER BY id DESC
         `)
         return resultado.rows
     } catch (error) {
@@ -31,16 +33,13 @@ export async function obtenerProductoPorId(id) {
     }
 }
 
-
-
-// ALTA Agregado lógico o físico
-
+// ALTA
 export async function crearProducto(datos) {
     const {
         nombre, descripcion, precio, categoria_id,
         destacado, activo,
-        imagenes,  
-        variantes  
+        imagenes,
+        variantes
     } = datos
 
     // Pedimos una conexión dedicada al pool para manejar la transacción de forma segura
@@ -50,7 +49,6 @@ export async function crearProducto(datos) {
         // Iniciamos la transacción en Supabase (PostgreSQL)
         await client.query('BEGIN')
 
-        
         const resultadoProducto = await client.query(
             `INSERT INTO productos (nombre, descripcion, precio, categoria_id, destacado, activo)
              VALUES ($1, $2, $3, $4, $5, $6)
@@ -65,7 +63,6 @@ export async function crearProducto(datos) {
             ]
         )
 
-      
         const nuevoProducto = resultadoProducto.rows[0]
         const nuevoProductoId = nuevoProducto.id
 
@@ -91,7 +88,6 @@ export async function crearProducto(datos) {
             }
         }
 
-        
         await client.query('COMMIT')
         return nuevoProducto
 
@@ -105,8 +101,6 @@ export async function crearProducto(datos) {
         client.release()
     }
 }
-
-// export async function crearProducto(id, datos) {}
 
 export async function activarProducto(id) {
     try {
@@ -237,3 +231,36 @@ export async function eliminarProducto(id) {
 }
 
 
+// ---> Publicos (Lectura)
+export async function obtenerProductosPublicos(destacado) {
+    try {
+        const query = destacado 
+            ?  `SELECT * FROM vista_catalogo_productos
+                WHERE activo = true AND destacado = true
+                ORDER BY id DESC`
+            :  `SELECT * FROM vista_catalogo_productos
+                WHERE activo = true
+                ORDER BY id DESC`
+
+        const resultado = await pool.query(query)
+
+        return resultado.rows
+    } catch (error) {
+        console.error('Error al obtener productos publicos:', error)
+        return { error: error.message }
+    }
+}
+
+export async function obtenerProductoPublicoPorId(id) {
+    try {
+        const resultado = await pool.query(`
+            SELECT * FROM vista_catalogo_productos 
+            WHERE id = $1 AND activo = true
+        `, [id])
+
+        return resultado.rows[0] || null
+    } catch (error) {
+        console.error('Error al obtener producto por ID:', error)
+        return { error: error.message }
+    }
+}

@@ -23,7 +23,6 @@ function navegarA(nombre) {
   if (nombre === 'newsletter') cargarNewsletterDesdeBD();
 }
 
-
 // ==========================================
 // DRAWER MOBILE
 // ==========================================
@@ -535,5 +534,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   cargarCategorias();
   cargarTallesYColores();
-  navegarA('dashboard');
+  navegarA('catalogo');
 });

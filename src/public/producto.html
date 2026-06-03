@@ -42,7 +42,6 @@
                     <span class="logoTexto">Balsamoa</span>
                 </a>
             </div>
-
             <nav id="id_menuNav">
                 <ul>
                     <li><a href="./index.html">Inicio</a></li>
@@ -51,7 +50,6 @@
                     <li><a href="./contacto.html" class="navCta">Contacto</a></li>
                 </ul>
             </nav>
-
             <button class="menuBtn" id="id_menuBtn" aria-label="Abrir menú">
                 <span></span><span></span><span></span>
             </button>
@@ -70,6 +68,7 @@
             <span class="breadcrumbActual" id="js_breadcrumbNombre">Cargando…</span>
         </nav>
 
+        <!-- Skeleton loader (se oculta al cargar) -->
         <div class="skeleton" id="js_skeleton">
             <div class="skeletonImg"></div>
             <div class="skeletonTexto">
@@ -82,6 +81,7 @@
             </div>
         </div>
 
+        <!-- Estado de error -->
         <div class="errorDetalle" id="js_error">
             <span class="errorIcono">⚠️</span>
             <p>Ocurrió un error inesperado.</p>
@@ -89,12 +89,25 @@
         </div>
 
         <div class="contenidoDetalle" id="js_contenidoDetalle">
-
             <div class="productoGaleria">
-                <div class="imgPrincipalWrap">
-                    <img src="" alt="" id="js_imgPrincipal">
-                    <img src="" alt="" id="js_imgNombre" style="display:none">
+                <div class="galeriaCarrusel">
+                    <span id="js_badge" class="galeriaBadge" hidden></span>
+
+                    <button type="button" class="galeriaNav galeriaNav--prev" id="js_btnCarrPrev" aria-label="Imagen anterior">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="galeriaNav galeriaNav--next" id="js_btnCarrNext" aria-label="Imagen siguiente">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+
+                    <div class="carruselTrack" id="js_carruselTrack"></div>
                 </div>
+
+                <div class="galeriaThumbs" id="js_thumbs"></div>
             </div>
 
             <div class="productoInfo">
@@ -115,13 +128,17 @@
 
                 <div class="infoDivisor"></div>
 
+                <div class="coloresBloque" id="js_colores" hidden>
+                    <span class="coloresLabel">Colores</span>
+                    <div class="coloresGrid" id="js_coloresGrid"></div>
+                </div>
+
                 <div class="tallesBloque">
                     <div class="tallesHeader">
                         <span class="tallesLabel">Talle</span>
                         <span class="talleSeleccionado" id="js_talleSeleccionado"></span>
                     </div>
-                    <div class="tallesGrid" id="js_talles">
-                    </div>
+                    <div class="tallesGrid" id="js_talles"></div>
                 </div>
 
                 <div class="accionesBloque">
@@ -158,8 +175,7 @@
                     <h2>También te puede interesar</h2>
                     <a href="./productos.html">Ver catálogo completo →</a>
                 </div>
-                <div class="relacionadosGrilla" id="js_relacionados">
-                </div>
+                <div class="productosGrilla" id="js_relacionados"></div>
             </div>
         </section>
 
@@ -173,14 +189,12 @@
                 <span class="footerNombre">Balsamoa</span>
                 <span class="footerCopyright">© 2023 — Córdoba, Argentina</span>
             </div>
-
             <nav class="footerLinks">
                 <a href="./index.html">Inicio</a>
                 <a href="./productos.html">Productos</a>
                 <a href="./nosotros.html">Nosotros</a>
                 <a href="./contacto.html">Contacto</a>
             </nav>
-
             <div class="footerSociales">
                 <a href="https://www.instagram.com/balsamoa1/" target="_blank" class="socialPill instagram">
                     <img src="./recursos/imagenes/ig.svg" alt="Instagram">

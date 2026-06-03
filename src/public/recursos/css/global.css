@@ -440,6 +440,104 @@ main {
     filter: brightness(0) invert(1);
 }
 
+/* ── Badges de disponibilidad ── */
+.cardBadge,
+.galeriaBadge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.badge--disponible {
+    background-color: rgba(44, 74, 94, 0.85);
+    color: #F5F0E8;
+}
+
+.badge--ultimas {
+    background-color: rgba(196, 112, 58, 0.9);
+    color: #FFFFFF;
+}
+
+.badge--agotado {
+    background-color: rgba(26, 26, 26, 0.75);
+    color: #A0A0A0;
+}
+
+/* ── Círculos de colores ── */
+.cardColores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 6px 0 4px;
+}
+
+.colorCirculo {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+}
+
+.colorCirculo--lg {
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+}
+
+/* ── Mensaje vacío / sin resultados ── */
+.sinResultados {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 64px 24px;
+    text-align: center;
+    color: var(--gris);
+}
+
+.sinResultadosIcono {
+    font-size: 32px;
+    color: var(--terracota-claro);
+    opacity: 0.5;
+}
+
+.sinResultados p {
+    font-size: 15px;
+    max-width: 360px;
+    line-height: 1.6;
+}
+
+.btnLimpiarFiltros {
+    padding: 10px 24px;
+    background-color: var(--azul);
+    color: var(--crema);
+    border: none;
+    border-radius: var(--radio);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btnLimpiarFiltros:hover {
+    background-color: var(--azul-oscuro);
+}
+
+.imgWrap,
+.cardRelImgWrap {
+    position: relative;
+}
 
 /* ==============================
    RESPONSIVE GLOBAL
