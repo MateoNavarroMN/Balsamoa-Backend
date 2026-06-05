@@ -958,3 +958,92 @@ table.tbl tbody tr:hover td {
         font-size: 18px;
     }
 }
+
+/* ==========================================
+   MODAL DE CONFIRMACIÓN (eliminar producto)
+   ========================================== */
+.modal-confirmar-caja {
+    max-width: 400px;
+    padding: 32px 28px 24px;
+    text-align: center;
+    overflow: visible;
+}
+
+.modal-confirmar-icono {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--danger-bg);
+    border: 1px solid rgba(190, 58, 46, .2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    font-size: 22px;
+    color: var(--danger);
+}
+
+.modal-confirmar-titulo {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--txt-1);
+    margin-bottom: 10px;
+}
+
+.modal-confirmar-desc {
+    font-size: 13px;
+    color: var(--txt-2);
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+
+.modal-confirmar-desc strong {
+    color: var(--txt-1);
+    font-weight: 600;
+}
+
+.modal-confirmar-aviso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--txt-3);
+    background: var(--bg-app);
+    border-radius: 7px;
+    padding: 8px 12px;
+    margin-bottom: 22px;
+}
+
+.modal-confirmar-acciones {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-confirmar-acciones .btn-outline {
+    flex: 1;
+    justify-content: center;
+}
+
+.btn-confirmar-eliminar {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    background: var(--danger);
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity .15s;
+}
+
+.btn-confirmar-eliminar:hover {
+    opacity: .88;
+}

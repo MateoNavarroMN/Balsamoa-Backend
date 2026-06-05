@@ -222,7 +222,7 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="modal-producto" onclick="cerrarModal('modal-producto', event)">
+  <div class="modal-overlay" id="modal-producto">
     <div class="modal-caja modal-caja-lg" onclick="event.stopPropagation()">
       <div class="modal-header">
         <span class="modal-titulo" id="modal-producto-titulo">Nuevo Producto</span>
@@ -305,6 +305,30 @@
         <button class="btn btn-outline" onclick="cerrarModal('modal-producto')">Cancelar</button>
         <button class="btn btn-primary" onclick="guardarProducto()">
           <i class="ti ti-device-floppy"></i> Guardar Producto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div class="modal-overlay" id="modal-confirmar" onclick="cerrarModal('modal-confirmar', event)">
+    <div class="modal-caja modal-confirmar-caja" onclick="event.stopPropagation()">
+      <div class="modal-confirmar-icono">
+        <i class="ti ti-trash"></i>
+      </div>
+      <p class="modal-confirmar-titulo">¿Eliminar producto?</p>
+      <p class="modal-confirmar-desc">
+        Vas a eliminar <strong id="confirm-nombre"></strong> junto con todas sus imágenes del servidor.
+        <br>Esta acción no se puede deshacer.
+      </p>
+      <p class="modal-confirmar-aviso">
+        <i class="ti ti-info-circle"></i>
+        Si tiene ventas registradas, el sistema no lo permitirá.
+      </p>
+      <div class="modal-confirmar-acciones">
+        <button class="btn btn-outline" onclick="cerrarModal('modal-confirmar')">Cancelar</button>
+        <button class="btn btn-confirmar-eliminar" id="confirm-btn-ok">
+          <i class="ti ti-trash"></i> Sí, eliminar
         </button>
       </div>
     </div>
