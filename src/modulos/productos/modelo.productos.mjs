@@ -230,6 +230,54 @@ export async function eliminarProducto(id) {
     }
 }
 
+// IMAGENES
+
+// Devuelve todos los registros de producto_imagenes para un producto.
+export async function obtenerImagenesDeProducto(productoId) {
+    try {
+        const resultado = await pool.query(
+            `SELECT id, url, orden
+             FROM producto_imagenes
+             WHERE producto_id = $1
+             ORDER BY orden ASC`,
+            [productoId]
+        )
+        return resultado.rows
+    } catch (error) {
+        console.error(`Error al obtener imágenes del producto ${productoId}:`, error)
+        return { error: error.message }
+    }
+}
+
+// Devuelve un registro de imagen por su ID (para el endpoint DELETE).
+export async function obtenerImagenPorId(imagenId) {
+    try {
+        const resultado = await pool.query(
+            `SELECT id, producto_id, url, orden
+             FROM producto_imagenes
+             WHERE id = $1`,
+            [imagenId]
+        )
+        return resultado.rows[0] || null
+    } catch (error) {
+        console.error(`Error al obtener imagen ${imagenId}:`, error)
+        return { error: error.message }
+    }
+}
+
+// Elimina un registro de imagen de la BD (el archivo en disco lo maneja el controlador).
+export async function eliminarImagenPorId(imagenId) {
+    try {
+        const resultado = await pool.query(
+            `DELETE FROM producto_imagenes WHERE id = $1 RETURNING *`,
+            [imagenId]
+        )
+        return resultado.rows[0] || null
+    } catch (error) {
+        console.error(`Error al eliminar imagen ${imagenId}:`, error)
+        return { error: error.message }
+    }
+}
 
 // ---> Publicos (Lectura)
 export async function obtenerProductosPublicos(destacado) {

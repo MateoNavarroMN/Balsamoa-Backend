@@ -3,6 +3,11 @@ import * as controlador from './controlador.productos.mjs'
 
 const rutasProductos = new Router()
 
+// Subir una imagen al disco y devolver su ruta pública
+rutasProductos.post('/api/v1/admin/imagenes/subir', controlador.subirImagen)
+// Eliminar una imagen del disco y de la BD por su ID
+rutasProductos.delete('/api/v1/admin/imagenes/:id', controlador.eliminarImagen)
+
 // ---> Rutas de Admin (CRUD)
 // LECTURAS (GET)
 rutasProductos.get('/api/v1/admin/productos', controlador.obtenerProductos)

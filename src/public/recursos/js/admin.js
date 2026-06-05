@@ -38,7 +38,6 @@ function cerrarDrawer() {
   document.body.style.overflow = '';
 }
 
-// Cerrar drawer al navegar (mobile)
 function alternarTema() {
   const html = document.documentElement;
   const esDark = html.dataset.theme === 'dark';
@@ -61,8 +60,6 @@ let catalogoMemoria = [];
 let categoriasMemoria = [];
 let tallesMemoria = [];
 let coloresMemoria = [];
-// Variantes del producto en edición. Se sincroniza desde la tabla
-// antes de cada toggleChip para no perder stocks al reordenar chips.
 let variantesEnEdicion = [];
 
 // ==========================================
@@ -264,10 +261,12 @@ async function toggleDestacado(id, estadoActual) {
 }
 
 function confirmarEliminar(id, nombre) {
-  const ok = confirm(
-    `⚠️ Eliminar definitivamente "${nombre}"?\n\nEsta acción no se puede deshacer.\nSi el producto tiene ventas registradas, el sistema no lo permitirá.`
-  );
-  if (ok) eliminarProducto(id);
+  document.getElementById('confirm-nombre').textContent = nombre;
+  document.getElementById('confirm-btn-ok').onclick = () => {
+    cerrarModal('modal-confirmar');
+    eliminarProducto(id);
+  };
+  document.getElementById('modal-confirmar').classList.add('abierto');
 }
 
 async function eliminarProducto(id) {
@@ -281,7 +280,7 @@ async function eliminarProducto(id) {
     }
     if (!res.ok) throw new Error(data.mensaje || `HTTP ${res.status}`);
 
-    mostrarToast('Producto eliminado', 'ti-trash');
+    mostrarToast('Producto e imágenes eliminados', 'ti-trash');
     await cargarCatalogoDesdeBD();
   } catch (err) {
     mostrarToast(`Error: ${err.message}`, 'ti-alert-triangle');
@@ -294,7 +293,6 @@ async function eliminarProducto(id) {
 async function abrirModalProducto(id = null) {
   document.getElementById('form-producto').reset();
   document.getElementById('prod-imagenes-lista').innerHTML = '';
-  agregarFilaImagen();
   variantesEnEdicion = [];
   renderizarChips('prod-talles-chips', tallesMemoria, [], 'talle');
   renderizarChips('prod-colores-chips', coloresMemoria, [], 'color');
@@ -303,7 +301,6 @@ async function abrirModalProducto(id = null) {
   if (id) {
     document.getElementById('modal-producto-titulo').textContent = `Editar Producto #${id}`;
 
-    // Primero buscamos en memoria; si no está, lo pedimos a la API
     let p = catalogoMemoria.find(prod => prod.id === id);
     if (!p) {
       try {
@@ -324,12 +321,16 @@ async function abrirModalProducto(id = null) {
     document.getElementById('prod-destacado').checked = p.destacado;
     document.getElementById('prod-activo').checked = p.activo;
 
-    // Imágenes
+    // Imágenes — cargar filas con previsualizaciones
     const imagenes = p.imagenes || (p.imagen_principal ? [{ url: p.imagen_principal }] : []);
     document.getElementById('prod-imagenes-lista').innerHTML = '';
-    imagenes.length > 0 ? imagenes.forEach(img => agregarFilaImagen(img.url)) : agregarFilaImagen();
+    if (imagenes.length > 0) {
+      imagenes.forEach(img => agregarFilaImagen(img.url));
+    } else {
+      agregarFilaImagen();
+    }
 
-    // Chips preseleccionados + tabla de stock con datos reales
+    // Chips + tabla de stock
     variantesEnEdicion = p.variantes || [];
     renderizarChips('prod-talles-chips', tallesMemoria, p.talle_ids || [], 'talle');
     renderizarChips('prod-colores-chips', coloresMemoria, p.color_ids || [], 'color');
@@ -340,6 +341,7 @@ async function abrirModalProducto(id = null) {
     document.getElementById('prod-id').value = '';
     document.getElementById('prod-destacado').checked = false;
     document.getElementById('prod-activo').checked = true;
+    agregarFilaImagen();
   }
 
   document.getElementById('modal-producto').classList.add('abierto');
@@ -372,8 +374,6 @@ function renderizarChips(contenedorId, items, seleccionados, tipo) {
 }
 
 function toggleChip(el) {
-  // Primero capturamos los stocks actuales de la tabla visible
-  // para no perderlos al regenerar con la nueva selección de chips
   variantesEnEdicion = obtenerVariantesDesdeTabla();
   el.classList.toggle('chip-activo');
   renderizarTablaStock(variantesEnEdicion);
@@ -434,25 +434,125 @@ function obtenerVariantesDesdeTabla() {
 }
 
 // ==========================================
-// FILAS DE IMÁGENES (solo URL)
+// FILAS DE IMÁGENES — subida real al servidor
 // ==========================================
-function agregarFilaImagen(url = '') {
+
+/**
+ * Agrega una fila de imagen al modal.
+ * Si se pasa una URL (imagen existente), muestra previsualización y botón de quitar.
+ * Si no, muestra el input de archivo para subir una nueva.
+ */
+function agregarFilaImagen(urlExistente = '') {
   const lista = document.getElementById('prod-imagenes-lista');
-  if (lista.children.length >= 6) return;
+  if (lista.children.length >= 6) {
+    mostrarToast('Máximo 6 imágenes por producto', 'ti-alert-triangle');
+    return;
+  }
 
   const fila = document.createElement('div');
   fila.className = 'imagen-fila';
   const orden = lista.children.length + 1;
 
-  fila.innerHTML = `
-    <span class="imagen-orden">${orden}</span>
-    <input type="text" class="form-control img-url-input" placeholder="https://..." value="${url}" style="flex:1;">
-    <button type="button" class="btn-quitar-imagen" onclick="quitarFilaImagen(this)" title="Quitar">
-      <i class="ti ti-x"></i>
-    </button>`;
+  if (urlExistente) {
+    // Imagen ya subida: mostrar miniatura + URL + botón quitar
+    fila.innerHTML = `
+      <span class="imagen-orden">${orden}</span>
+      <img src="${urlExistente}" alt="Imagen ${orden}"
+           style="width:40px;height:40px;object-fit:cover;border-radius:5px;border:1px solid var(--border);flex-shrink:0;">
+      <input type="text" class="form-control img-url-input" value="${urlExistente}" readonly
+             style="flex:1;font-size:11px;color:var(--txt-3);">
+      <button type="button" class="btn-quitar-imagen" onclick="quitarFilaImagen(this)" title="Quitar imagen">
+        <i class="ti ti-x"></i>
+      </button>`;
+  } else {
+    // Nueva imagen: mostrar input de archivo
+    const inputId = `img-file-${Date.now()}`;
+    fila.innerHTML = `
+      <span class="imagen-orden">${orden}</span>
+      <input type="file" id="${inputId}" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none;"
+             onchange="previsualizarYSubir(this)">
+      <label for="${inputId}" class="btn btn-outline btn-sm" style="cursor:pointer;">
+        <i class="ti ti-upload"></i> Elegir imagen
+      </label>
+      <span class="img-nombre-archivo" style="flex:1;font-size:11px;color:var(--txt-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+        Sin archivo seleccionado
+      </span>
+      <input type="hidden" class="img-url-input" value="">
+      <button type="button" class="btn-quitar-imagen" onclick="quitarFilaImagen(this)" title="Quitar">
+        <i class="ti ti-x"></i>
+      </button>`;
+  }
 
   lista.appendChild(fila);
   actualizarOrdenImagenes();
+}
+
+/**
+ * Cuando el usuario elige un archivo:
+ * 1. Muestra el nombre del archivo y una miniatura
+ * 2. Sube el archivo al servidor vía /api/v1/admin/imagenes/subir
+ * 3. Guarda la URL devuelta en el campo oculto img-url-input
+ */
+async function previsualizarYSubir(input) {
+  const fila = input.closest('.imagen-fila');
+  const archivo = input.files[0];
+  if (!archivo) return;
+
+  const labelSpan = fila.querySelector('.img-nombre-archivo');
+  const urlInput = fila.querySelector('.img-url-input');
+  const labelBtn = fila.querySelector('label.btn');
+
+  // Mostrar estado de carga
+  labelSpan.textContent = 'Subiendo...';
+  labelBtn.innerHTML = '<i class="ti ti-loader"></i> Subiendo...';
+  labelBtn.style.pointerEvents = 'none';
+
+  // Previsualización local inmediata
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    // Insertar miniatura si no existe
+    let miniatura = fila.querySelector('.img-preview-mini');
+    if (!miniatura) {
+      miniatura = document.createElement('img');
+      miniatura.className = 'img-preview-mini';
+      miniatura.style.cssText = 'width:40px;height:40px;object-fit:cover;border-radius:5px;border:1px solid var(--border);flex-shrink:0;';
+      fila.insertBefore(miniatura, labelBtn);
+    }
+    miniatura.src = e.target.result;
+  };
+  reader.readAsDataURL(archivo);
+
+  // Subir al servidor
+  try {
+    const formData = new FormData();
+    formData.append('imagen', archivo);
+
+    const res = await fetch('/api/v1/admin/imagenes/subir', {
+      method: 'POST',
+      body: formData
+      // No poner Content-Type: el browser lo setea automáticamente con el boundary
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.mensaje || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    // Guardar la URL pública devuelta por el servidor
+    urlInput.value = data.url;
+    labelSpan.textContent = archivo.name;
+    labelBtn.innerHTML = '<i class="ti ti-check"></i> Subida';
+    labelBtn.style.cssText += 'color:var(--success);border-color:var(--success);pointer-events:none;';
+
+  } catch (err) {
+    labelSpan.textContent = 'Error al subir';
+    labelBtn.innerHTML = '<i class="ti ti-alert-triangle"></i> Reintentar';
+    labelBtn.style.pointerEvents = 'auto';
+    urlInput.value = '';
+    mostrarToast(`Error al subir imagen: ${err.message}`, 'ti-alert-triangle');
+  }
 }
 
 function quitarFilaImagen(btn) {
@@ -465,6 +565,10 @@ function actualizarOrdenImagenes() {
     .forEach((span, i) => { span.textContent = i + 1; });
 }
 
+/**
+ * Recolecta todas las URLs ya subidas del modal.
+ * Solo incluye filas que tienen un img-url-input con valor (subida exitosa o existente).
+ */
 function obtenerImagenes() {
   return [...document.querySelectorAll('#prod-imagenes-lista .img-url-input')]
     .map((inp, i) => ({ url: inp.value.trim(), orden: i + 1 }))
@@ -487,6 +591,17 @@ async function guardarProducto() {
 
   if (!nombre || !precio || !categoria_id) {
     mostrarToast('Completá nombre, precio y categoría', 'ti-alert-triangle');
+    return;
+  }
+
+  // Verificar si hay imágenes pendientes de subida (elegidas pero no subidas aún)
+  const filasConArchivo = [...document.querySelectorAll('#prod-imagenes-lista input[type="file"]')]
+    .filter(inp => inp.files && inp.files.length > 0);
+  const filasSubidas = [...document.querySelectorAll('#prod-imagenes-lista .img-url-input')]
+    .filter(inp => inp.value === '' && inp.closest('.imagen-fila').querySelector('input[type="file"]'));
+
+  if (filasSubidas.length > 0) {
+    mostrarToast('Esperá que terminen de subirse las imágenes', 'ti-alert-triangle');
     return;
   }
 

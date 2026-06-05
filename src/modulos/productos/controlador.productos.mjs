@@ -1,4 +1,41 @@
 import * as modelo from "./modelo.productos.mjs"
+import path from "path"
+import { fileURLToPath } from "url"
+import fs from 'fs'
+import multer from "multer"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Configuración privada de Multer
+const CARPETA_IMAGENES = path.join(__dirname, '../../public/recursos/imagenes/productos')
+
+if (!fs.existsSync(CARPETA_IMAGENES)) {
+    fs.mkdirSync(CARPETA_IMAGENES, { recursive: true })
+}
+
+const storage = multer.diskStorage({
+    destination: (_req, _file, cb) => {
+        cb(null, CARPETA_IMAGENES)
+    },
+    filename: (_req, file, cb) => {
+        const nombreLimpio = file.originalname.replace(/\s+/g, '_')
+        cb(null, `${Date.now()}_${nombreLimpio}`)
+    }
+})
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+    fileFilter: (_req, file, cb) => {
+        const TIPOS_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+        if (TIPOS_PERMITIDOS.includes(file.mimetype)) {
+            cb(null, true)
+        } else {
+            cb(new Error('TIPO_INVALIDO'))
+        }
+    }
+}).single('imagen') // Preparamos la función que espera el campo 'imagen'
 
 // ---> Admin (CRUD)
 
@@ -155,6 +192,17 @@ export async function actualizarProducto(req, res) {
         }
     }
 
+    // Si se reemplazan imágenes, obtenemos las actuales para saber cuáles borrar del disco
+    let imagenesABorrar = []
+    if (Array.isArray(imagenes)) {
+        const imagenesActuales = await modelo.obtenerImagenesDeProducto(id)
+        if (!imagenesActuales.error) {
+            const nuevasUrls = new Set(imagenes.map(img => img.url))
+            // Solo borrar las que no están en la nueva lista
+            imagenesABorrar = imagenesActuales.filter(img => !nuevasUrls.has(img.url))
+        }
+    }
+
     const resultado = await modelo.actualizarProducto(id, { nombre, descripcion, precio, categoria_id, destacado, imagenes, variantes })
 
     if (resultado.error) {
@@ -163,6 +211,13 @@ export async function actualizarProducto(req, res) {
 
     if (resultado.length === 0) {
         return res.status(404).json({ mensaje: 'Producto no encontrado' })
+    }
+
+    // Borrar del disco las imágenes eliminadas (luego de confirmar que la BD se actualizó)
+    for (const img of imagenesABorrar) {
+        if (img.url && img.url.startsWith('/recursos/')) {
+            borrarArchivo(rutaPublicaADisco(img.url))
+        }
     }
 
     res.status(200).json({
@@ -178,12 +233,16 @@ export async function eliminarProducto(req, res) {
         return res.status(400).json({ mensaje: 'El ID del producto debe ser un número válido' })
     }
 
+    // Obtener las imágenes ANTES de eliminar el producto
+    const imagenes = await modelo.obtenerImagenesDeProducto(id)
+
+    // Eliminar el producto de la BD
     const resultado = await modelo.eliminarProducto(id)
     if (resultado.error) {
         // Código 23503 en PostgreSQL significa "Violación de llave foránea"
         if (resultado.code === '23503') {
             return res.status(409).json({
-                mensaje: 'No se puede eliminar definitivamente porque el producto ya tiene ventas registradas. Te recomendamos desactivarlo (baja lógica).'
+                mensaje: 'No se puede eliminar definitivamente porque el producto ya tiene ventas registradas. Te recomendamos desactivarlo.'
             });
         }
         return res.status(500).json({ mensaje: 'Error al intentar eliminar' });
@@ -191,6 +250,15 @@ export async function eliminarProducto(req, res) {
 
     if (resultado.length === 0) {
         return res.status(404).json({ mensaje: 'Producto no encontrado' })
+    }
+
+    // Borrar los archivos del disco (solo si la BD confirmó el DELETE)
+    if (!imagenes.error && Array.isArray(imagenes)) {
+        for (const img of imagenes) {
+            if (img.url && img.url.startsWith('/recursos/')) {
+                borrarArchivo(rutaPublicaADisco(img.url))
+            }
+        }
     }
 
     res.status(200).json({
@@ -218,6 +286,68 @@ export async function desactivarProducto(req, res) {
             mensaje: 'Producto eliminado exitosamente (baja lógica)',
             producto: resultado
         })
+}
+
+// ---> Gestión de imágenes
+// Recibe un archivo por multer, lo guarda, y devuelve la ruta publica
+export function subirImagen(req, res) {
+    // Ejecutamos Multer manualmente adentro de la ruta
+    upload(req, res, function (err) {
+        
+        // Manejo de Errores
+        if (err instanceof multer.MulterError) {
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                return res.status(400).json({ mensaje: 'El archivo supera el límite de 5 MB' })
+            }
+            return res.status(400).json({ mensaje: `Error de carga: ${err.message}` })
+        } else if (err) {
+            if (err.message === 'TIPO_INVALIDO') {
+                return res.status(400).json({ mensaje: 'Solo se aceptan imágenes (jpg, png, webp, gif)' })
+            }
+            return res.status(400).json({ mensaje: err.message })
+        }
+
+        // Validación de archivo vacío
+        if (!req.file) {
+            return res.status(400).json({ mensaje: 'No se recibió ningún archivo' })
+        }
+
+        // Respuesta Exitosa
+        const rutaPublica = '/recursos/imagenes/productos/' + req.file.filename
+        res.status(201).json({
+            mensaje: 'Imagen subida exitosamente',
+            url: rutaPublica,
+            filename: req.file.filename
+        })
+    })
+}
+
+// Obtiene la URL guardada en BD, borra el archivo del disco y el registro.
+export async function eliminarImagen(req, res) {
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+        return res.status(400).json({ mensaje: 'El ID de imagen debe ser un número válido' })
+    }
+
+    const imagen = await modelo.obtenerImagenPorId(id)
+
+    if (!imagen) {
+        return res.status(404).json({ mensaje: 'Imagen no encontrada' })
+    }
+    if (imagen.error) {
+        return res.status(500).json({ mensaje: 'Error al buscar la imagen' })
+    }
+
+    if (imagen.url && imagen.url.startsWith('/recursos/')) {
+        borrarArchivo(rutaPublicaADisco(imagen.url))
+    }
+
+    const resultado = await modelo.eliminarImagenPorId(id)
+    if (resultado.error) {
+        return res.status(500).json({ mensaje: 'Error al eliminar la imagen de la base de datos' })
+    }
+
+    res.status(200).json({ mensaje: 'Imagen eliminada del disco y de la base de datos' })
 }
 
 // ---> Publicos (Lectura)
@@ -253,6 +383,9 @@ export async function obtenerProductoPublicoPorId(req, res) {
     res.json(limpiarCampos(producto))
 }
 
+
+// Helpers de respuesta publica
+
 // Transforma el stock total a un string para la tienda publica
 function censuraStock(stockTotal){
     const stock = Number(stockTotal)
@@ -277,5 +410,23 @@ function limpiarCampos(producto){
         ...resto,
         disponibilidad: censuraStock(stock_total),
         stock_por_talle: tallesSeguros
+    }
+}
+
+// Helpers internos
+
+// Convierte la ruta publica a su ruta absoluta para poder borrarla con fs
+function rutaPublicaADisco(rutaPublica) {
+    return path.join(__dirname, '../../public', rutaPublica)
+}
+
+// Borra un archivo del disco
+function borrarArchivo(rutaDisco) {
+    try {
+        if (fs.existsSync(rutaDisco)) {
+            fs.unlinkSync(rutaDisco)
+        }
+    } catch (err) {
+        console.warn('No se pudo borrar el archivo:', rutaDisco, err.message)
     }
 }

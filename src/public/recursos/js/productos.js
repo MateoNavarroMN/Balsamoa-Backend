@@ -122,13 +122,28 @@ function poblarCategorias(productos) {
 
 // ── Filtros
 
-/**
- * Lee los valores del formulario y filtra `todosLosProductos`.
- * Regla 2: el filtro de talle usa `tieneStock === true`.
- */
+// ── Comportamiento inteligente de los menú desplegables ──
+const menusColapsables = document.querySelectorAll('.menuColapsable')
+
+document.addEventListener('click', (evento) => {
+    // Verificamos si el clic ocurrió adentro de algún menú
+    const menuClickeado = evento.target.closest('.menuColapsable')
+
+    menusColapsables.forEach(menu => {
+        // Si el usuario hizo clic en la página (fuera de los menú), cerramos todos.
+        if (!menuClickeado) {
+            menu.removeAttribute('open')
+        } 
+        // Si el usuario hizo clic en un menú, cerramos los *otros* menú para que no se superpongan.
+        else if (menu !== menuClickeado) {
+            menu.removeAttribute('open')
+        }
+    })
+})
+
 function aplicarFiltros() {
     const data = new FormData(formFiltros)
-    const talles = data.getAll('talle')                          // checkboxes marcados
+    const talles = data.getAll('talle')
     const desde = parseFloat(data.get('precio-desde')) || 0
     const hasta = parseFloat(data.get('precio-hasta')) || Infinity
     const catSel = selectCategoria?.value ?? ''
