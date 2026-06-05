@@ -279,21 +279,21 @@ INSERT INTO productos (id, nombre, descripcion, precio, categoria_id, destacado,
 
 -- 5. Vinculamos las Imágenes
 INSERT INTO producto_imagenes (producto_id, url, orden) VALUES
-(1, './recursos/imagenes/productos/Hoodie Basic Blanco.webp', 1),
-(2, './recursos/imagenes/productos/Hoodie Basic Negro.webp', 1),
-(3, './recursos/imagenes/productos/Hoodie Basic Verde.webp', 1),
-(4, './recursos/imagenes/productos/Remera Blanca Guardapampa.webp', 1),
-(5, './recursos/imagenes/productos/Remera Verde Woke UP.webp', 1),
-(6, './recursos/imagenes/productos/Hoodie Beige Guardapampa.webp', 1),
-(7, './recursos/imagenes/productos/Hoodie Azul Guardapampa.webp', 1),
-(8, './recursos/imagenes/productos/Hoodie Basic Gris Claro.webp', 1),
-(9, './recursos/imagenes/productos/Hoodie Basic Gris Oscuro.webp', 1),
-(10, './recursos/imagenes/productos/Remera Guardapampa.webp', 1),
-(11, './recursos/imagenes/productos/Pantalon Cargo Negro.webp', 1),
-(12, './recursos/imagenes/productos/Pantalon Parachute Beige.webp', 1),
-(13, './recursos/imagenes/productos/Campera Puffer Negra.webp', 1),
-(14, './recursos/imagenes/productos/Remera Oversize Gris.webp', 1),
-(15, './recursos/imagenes/productos/Hoodie Zip Azul.webp', 1);
+(1, '/recursos/imagenes/productos/Hoodie Basic Blanco.webp', 1),
+(2, '/recursos/imagenes/productos/Hoodie Basic Negro.webp', 1),
+(3, '/recursos/imagenes/productos/Hoodie Basic Verde.webp', 1),
+(4, '/recursos/imagenes/productos/Remera Blanca Guardapampa.webp', 1),
+(5, '/recursos/imagenes/productos/Remera Verde Woke UP.webp', 1),
+(6, '/recursos/imagenes/productos/Hoodie Beige Guardapampa.webp', 1),
+(7, '/recursos/imagenes/productos/Hoodie Azul Guardapampa.webp', 1),
+(8, '/recursos/imagenes/productos/Hoodie Basic Gris Claro.webp', 1),
+(9, '/recursos/imagenes/productos/Hoodie Basic Gris Oscuro.webp', 1),
+(10, '/recursos/imagenes/productos/Remera Guardapampa.webp', 1),
+(11, '/recursos/imagenes/productos/Pantalon Cargo Negro.webp', 1),
+(12, '/recursos/imagenes/productos/Pantalon Parachute Beige.webp', 1),
+(13, '/recursos/imagenes/productos/Campera Puffer Negra.webp', 1),
+(14, '/recursos/imagenes/productos/Remera Oversize Gris.webp', 1),
+(15, '/recursos/imagenes/productos/Hoodie Zip Azul.webp', 1);
 
 -- 6. Motor de Variantes
 INSERT INTO variantes (producto_id, talle_id, color_id, stock) VALUES
