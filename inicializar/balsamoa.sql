@@ -240,13 +240,15 @@ LEFT JOIN categorias c ON p.categoria_id = c.id;
 -- 1. Insertamos las Categorías
 INSERT INTO categorias (id, nombre, descripcion) VALUES
 (1, 'Hoodie', 'Buzos de alta calidad con y sin capucha'),
-(2, 'Remera', 'Remeras de algodón premium'),
-(3, 'Campera', 'Camperas de abrigo y media estación'),
-(4, 'Pantalón', 'Pantalones cargo, parachute y jogger');
+(2, 'Remera', 'Remeras de algodón premium');
 
 -- 2. Insertamos los Talles
 INSERT INTO talles (id, nombre, orden) VALUES
-(1, 'S', 1), (2, 'M', 2), (3, 'L', 3), (4, 'XL', 4), (5, 'XXL', 5);
+(1, 'S', 1), 
+(2, 'M', 2), 
+(3, 'L', 3), 
+(4, 'XL', 4), 
+(5, 'XXL', 5);
 
 -- 3. Insertamos los Colores
 INSERT INTO colores (id, nombre, hex) VALUES
@@ -270,12 +272,7 @@ INSERT INTO productos (id, nombre, descripcion, precio, categoria_id, destacado,
 (7, 'Hoodie Azul Guardapampa', 'Buzo con capucha azul royal intenso.', 55000.00, 1, false, true),
 (8, 'Hoodie Basic Gris Claro', 'Buzo gris melange claro.', 40000.00, 1, false, true),
 (9, 'Hoodie Basic Gris Oscuro', 'Buzo con capucha gris carbón.', 40000.00, 1, true, true),
-(10, 'Remera Guardapampa', 'Remera manga corta beige claro con logo pequeño.', 35000.00, 2, false, true),
-(11, 'Pantalón Cargo Negro', 'Pantalón cargo de gabardina de alta resistencia con 6 bolsillos.', 55000.00, 4, true, true),
-(12, 'Pantalón Parachute Beige', 'Pantalón parachute ultra liviano de calce holgado y ajustable.', 48000.00, 4, false, true),
-(13, 'Campera Puffer Negra', 'Campera de abrigo acolchada y resistente al agua, ideal invierno.', 85000.00, 3, true, true),
-(14, 'Remera Oversize Gris', 'Remera de corte oversize súper relajado en gris claro melange.', 28000.00, 2, false, true),
-(15, 'Hoodie Zip Azul', 'Buzo azul oscuro con cierre completo frontal y capucha amplia.', 48000.00, 1, false, true);
+(10, 'Remera Guardapampa', 'Remera manga corta beige claro con logo pequeño.', 35000.00, 2, false, true);
 
 -- 5. Vinculamos las Imágenes
 INSERT INTO producto_imagenes (producto_id, url, orden) VALUES
@@ -288,12 +285,7 @@ INSERT INTO producto_imagenes (producto_id, url, orden) VALUES
 (7, '/recursos/imagenes/productos/Hoodie Azul Guardapampa.webp', 1),
 (8, '/recursos/imagenes/productos/Hoodie Basic Gris Claro.webp', 1),
 (9, '/recursos/imagenes/productos/Hoodie Basic Gris Oscuro.webp', 1),
-(10, '/recursos/imagenes/productos/Remera Guardapampa.webp', 1),
-(11, '/recursos/imagenes/productos/Pantalon Cargo Negro.webp', 1),
-(12, '/recursos/imagenes/productos/Pantalon Parachute Beige.webp', 1),
-(13, '/recursos/imagenes/productos/Campera Puffer Negra.webp', 1),
-(14, '/recursos/imagenes/productos/Remera Oversize Gris.webp', 1),
-(15, '/recursos/imagenes/productos/Hoodie Zip Azul.webp', 1);
+(10, '/recursos/imagenes/productos/Remera Guardapampa.webp', 1);
 
 -- 6. Motor de Variantes
 INSERT INTO variantes (producto_id, talle_id, color_id, stock) VALUES
@@ -310,27 +302,24 @@ INSERT INTO variantes (producto_id, talle_id, color_id, stock) VALUES
 (4, 3, 1, 3), 
 (4, 4, 1, 1),
 -- Remera Verde Woke UP (Mucho stock y todos los talles)
-(5, 1, 3, 20), (5, 2, 3, 20), (5, 3, 3, 20), (5, 4, 3, 20),
+(5, 1, 3, 20), 
+(5, 2, 3, 20), 
+(5, 3, 3, 20), 
+(5, 4, 3, 20),
 -- Hoodie Beige Guardapampa (Totalmente Agotado)
-(6, 2, 4, 0), (6, 3, 4, 0),
+(6, 2, 4, 0), 
+(6, 3, 4, 0),
 -- Hoodie Azul (S, XL)
-(7, 1, 5, 10), (7, 4, 5, 10),
+(7, 1, 5, 10), 
+(7, 4, 5, 10),
 -- Hoodie Gris Claro
-(8, 1, 6, 12), (8, 3, 6, 15),
+(8, 1, 6, 12), 
+(8, 3, 6, 15),
 -- Hoodie Gris Oscuro
-(9, 3, 7, 8), (9, 4, 7, 5),
+(9, 3, 7, 8), 
+(9, 4, 7, 5),
 -- Remera Guardapampa (Solo XL)
-(10, 4, 4, 15),
--- Pantalón Cargo (M, L)
-(11, 2, 2, 10), (11, 3, 2, 12),
--- Pantalón Parachute Beige (S, M)
-(12, 1, 4, 5), (12, 2, 4, 4),
--- Campera Puffer (L, XL, XXL)
-(13, 3, 2, 5), (13, 4, 2, 3), (13, 5, 2, 2),
--- Remera Oversize (M)
-(14, 2, 6, 25),
--- Hoodie Zip Azul (S, M, L)
-(15, 1, 5, 8), (15, 2, 5, 8), (15, 3, 5, 10);
+(10, 4, 4, 15);
 
 -- 7. Ajuste de seguridad PostgreSQL (Actualizamos las secuencias para que los INSERT desde la web no choquen)
 SELECT setval('categorias_id_seq', (SELECT MAX(id) FROM categorias));
