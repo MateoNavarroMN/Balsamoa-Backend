@@ -17,7 +17,6 @@ export async function login(req, res) {
     }
 
     // Comparamos el hash con la contraseña ingresada
-    console.log(usuario)
     const esValida = await bcrypt.compare(password, usuario.password_hash)
     if (!esValida) {
         return res.status(401).json({ mensaje: 'Credenciales inválidas' })
