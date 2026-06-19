@@ -61,7 +61,8 @@ CREATE TABLE usuarios (
     password_hash VARCHAR(255) NOT NULL,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     rol_id INTEGER REFERENCES roles(id) ON DELETE RESTRICT,
-    activo BOOLEAN DEFAULT true
+    activo BOOLEAN DEFAULT true,
+    sesion_id VARCHAR(255)
 );
 
 CREATE TABLE datos_envio (
@@ -328,3 +329,15 @@ SELECT setval('colores_id_seq', (SELECT MAX(id) FROM colores));
 SELECT setval('productos_id_seq', (SELECT MAX(id) FROM productos));
 SELECT setval('producto_imagenes_id_seq', COALESCE((SELECT MAX(id) FROM producto_imagenes), 1));
 SELECT setval('variantes_id_seq', COALESCE((SELECT MAX(id) FROM variantes), 1));
+
+INSERT INTO roles (id, nombre, descripcion) 
+VALUES (1, 'Administrador', 'Acceso total al panel de control de Balsamoa')
+
+INSERT INTO usuarios (nombre, email, password_hash, rol_id, activo) 
+VALUES (
+    'Admin Balsamoa', 
+    'admin@balsamoa.com', 
+    '$2b$10$4J.A45VnpRgqspUxC6eza.GQ/YXf8qLEJaWpkgh1vFEJBfTEvwtKO', 
+    1,
+    true
+);
