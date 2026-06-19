@@ -31,3 +31,20 @@ export async function actualizarSesionUsuario(usuarioId, sesionId) {
         return { error: error.message }
     }
 }
+
+export async function buscarUsuarioPorId(id) {
+    try {
+        const resultado = await pool.query(`
+            SELECT *
+            FROM usuarios
+            WHERE id = $1 AND activo = true
+        `,
+            [id]
+        )
+
+        return resultado.rows[0] || null
+    } catch (error) {
+        console.error('Error buscando usuario por ID:', error)
+        return { error: error.message }
+    }
+}
