@@ -1,41 +1,8 @@
-// ============================================================
-// BALSAMOA — Login.JS
-// Captura el formulario de login, valida y consume el endpoint
-// POST /api/v1/autenticacion/login
-// ============================================================
-
 document.addEventListener('DOMContentLoaded', () => {
-    inicializarTema()
     inicializarVerPassword()
     inicializarFormulario()
 })
 
-// ==============================
-// TEMA (claro / oscuro)
-// ==============================
-function inicializarTema() {
-    const temaGuardado = localStorage.getItem('balsamoa-tema') || 'light'
-    document.documentElement.setAttribute('data-theme', temaGuardado)
-    actualizarIconoTema(temaGuardado)
-
-    const btnTema = document.getElementById('btn-theme-login')
-    btnTema.addEventListener('click', () => {
-        const temaActual = document.documentElement.getAttribute('data-theme')
-        const nuevoTema = temaActual === 'light' ? 'dark' : 'light'
-        document.documentElement.setAttribute('data-theme', nuevoTema)
-        localStorage.setItem('balsamoa-tema', nuevoTema)
-        actualizarIconoTema(nuevoTema)
-    })
-}
-
-function actualizarIconoTema(tema) {
-    const icono = document.getElementById('icono-tema-login')
-    icono.className = tema === 'light' ? 'ti ti-moon' : 'ti ti-sun'
-}
-
-// ==============================
-// MOSTRAR / OCULTAR CONTRASEÑA
-// ==============================
 function inicializarVerPassword() {
     const btn = document.getElementById('btn-ver-password')
     const input = document.getElementById('login-password')
@@ -48,9 +15,6 @@ function inicializarVerPassword() {
     })
 }
 
-// ==============================
-// FORMULARIO DE LOGIN
-// ==============================
 function inicializarFormulario() {
     const form = document.getElementById('form-login')
     form.addEventListener('submit', manejarSubmit)
@@ -99,9 +63,6 @@ async function manejarSubmit(evento) {
     }
 }
 
-// ==============================
-// VALIDACIONES DE FRONT
-// ==============================
 function validarCampos(email, password) {
     let valido = true
 
@@ -135,9 +96,6 @@ function limpiarErrorCampo(campo) {
     error.classList.remove('visible')
 }
 
-// ==============================
-// ALERTA GENERAL (errores del servidor)
-// ==============================
 function mostrarAlerta(mensaje) {
     const alerta = document.getElementById('login-alerta')
     document.getElementById('login-alerta-texto').textContent = mensaje
@@ -148,9 +106,6 @@ function ocultarAlerta() {
     document.getElementById('login-alerta').classList.remove('visible')
 }
 
-// Traduce los mensajes del backend (o el status HTTP) a textos amigables.
-// El backend ya devuelve "Credenciales inválidas" de forma genérica por seguridad,
-// así que respetamos ese mensaje y sólo cubrimos los casos que no vienen con texto propio.
 function mapearMensajeError(status, mensajeServidor) {
     if (mensajeServidor) return mensajeServidor
 
@@ -159,9 +114,6 @@ function mapearMensajeError(status, mensajeServidor) {
     return 'Ocurrió un error inesperado. Intentá de nuevo en unos minutos.'
 }
 
-// ==============================
-// ESTADO DE CARGA DEL BOTÓN
-// ==============================
 function establecerCargando(estaCargando) {
     const boton = document.getElementById('btn-login')
     const texto = document.getElementById('btn-login-texto')
