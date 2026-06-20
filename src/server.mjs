@@ -38,6 +38,8 @@ app.use(rutasTalles)
 app.use(rutasColores)
 
 app.listen(PUERTO, () => {
-    console.log(`Servidor corriendo en http://localhost:${PUERTO}`)
-    console.log(`Panel de Admin http://localhost:${PUERTO}/admin`)
+    console.log(`.................................................`)
+    console.log(`Tienda: http://localhost:${PUERTO}`)
+    console.log(`Panel de Admin: http://localhost:${PUERTO}/admin`)
+    console.log(`.................................................`)
 })
