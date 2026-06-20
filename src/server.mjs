@@ -27,6 +27,7 @@ app.use(cookieParser())
 // Le suma a la carpeta --> C:/.../src/
 app.use('/recursos', express.static(path.join(__dirname, './public/recursos')))
 app.use('/admin', express.static(path.join(__dirname, './public/admin')))
+app.use('/login', express.static(path.join(__dirname, './public/login')))
 app.use('/', express.static(path.join(__dirname, './public/tienda')))
 
 // Rutas de tu API
