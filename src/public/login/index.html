@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión | Balsamoa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="/recursos/css/login.css">
+</head>
+
+<body>
+
+  <div class="login-pantalla">
+
+    <!-- ── Panel de marca (izquierda en desktop) ── -->
+    <aside class="login-marca">
+      <div class="login-marca-contenido">
+        <div class="login-marca-logo">
+          <img src="/recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa">
+          <span>Balsamoa</span>
+        </div>
+        <p class="login-marca-frase">
+          Cada prenda cuenta una historia.<br>Administrá la tuya.
+        </p>
+      </div>
+      <div class="login-marca-pie">Panel de administración</div>
+    </aside>
+
+    <!-- ── Panel de formulario (derecha en desktop) ── -->
+    <main class="login-panel">
+      <button class="btn-theme-login" id="btn-theme-login" type="button" title="Cambiar tema">
+        <i class="ti ti-moon" id="icono-tema-login"></i>
+      </button>
+
+      <div class="login-caja">
+
+        <div class="login-logo-mobile">
+          <img src="/recursos/imagenes/logo balsamoa.webp" alt="Logo Balsamoa">
+        </div>
+
+        <div class="login-encabezado">
+          <h1>Bienvenido de nuevo</h1>
+          <p>Ingresá tus credenciales para acceder al panel.</p>
+        </div>
+
+        <div class="login-alerta" id="login-alerta">
+          <i class="ti ti-alert-circle"></i>
+          <span id="login-alerta-texto"></span>
+        </div>
+
+        <form id="form-login" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email</label>
+            <div class="input-icono">
+              <i class="ti ti-mail"></i>
+              <input type="email" id="login-email" class="form-control" placeholder="tu@balsamoa.com" autocomplete="username" required>
+            </div>
+            <span class="form-error" id="error-email"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Contraseña</label>
+            <div class="input-icono">
+              <i class="ti ti-lock"></i>
+              <input type="password" id="login-password" class="form-control" placeholder="••••••••" autocomplete="current-password" required>
+              <button type="button" class="btn-ver-password" id="btn-ver-password" tabindex="-1" title="Mostrar contraseña">
+                <i class="ti ti-eye" id="icono-ver-password"></i>
+              </button>
+            </div>
+            <span class="form-error" id="error-password"></span>
+          </div>
+
+          <button type="submit" class="btn-login" id="btn-login">
+            <span id="btn-login-texto">Iniciar sesión</span>
+            <i class="ti ti-loader-2 spin-icono" id="btn-login-spinner" style="display:none;"></i>
+          </button>
+        </form>
+
+        <p class="login-footer-texto">
+          <i class="ti ti-shield-lock"></i>
+          Acceso exclusivo para administradores de Balsamoa
+        </p>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="/recursos/js/login.js"></script>
+</body>
+
+</html>
