@@ -9,6 +9,11 @@ const TITULOS_SECCION = {
   newsletter: 'Newsletter'
 };
 
+function leerCookie(nombre) {
+  const match = document.cookie.match(new RegExp('(^| )' + nombre + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
 function navegarA(nombre) {
   cerrarDrawer();
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -41,8 +46,14 @@ function cerrarDrawer() {
 function alternarTema() {
   const html = document.documentElement;
   const esDark = html.dataset.theme === 'dark';
-  html.dataset.theme = esDark ? 'light' : 'dark';
-  document.getElementById('icono-tema').className = esDark ? 'ti ti-moon' : 'ti ti-sun';
+  const nuevoTema = esDark ? 'light' : 'dark';
+  
+  // Cambiamos el atributo en el HTML y el ícono
+  html.dataset.theme = nuevoTema;
+  document.getElementById('icono-tema').className = nuevoTema === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
+  
+  // Guardamos la preferencia en la memoria del navegador
+  localStorage.setItem('balsamoa_tema_admin', nuevoTema);
 }
 
 function mostrarToast(mensaje, icono = 'ti-check') {
@@ -63,11 +74,55 @@ let coloresMemoria = [];
 let variantesEnEdicion = [];
 
 // ==========================================
-// CARGA INICIAL
+// INICIO
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+
+  const temaGuardado = localStorage.getItem('balsamoa_tema_admin') || 'light';
+  document.documentElement.dataset.theme = temaGuardado;
+  const iconoTema = document.getElementById('icono-tema');
+  if (iconoTema) {
+    iconoTema.className = temaGuardado === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
+  }
+
+  document.getElementById('topbar-fecha').textContent = new Date().toLocaleDateString('es-AR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  
+  // Leemos el nombre que nos mandó el backend
+  const nombreGuardado = leerCookie('usuario_nombre') || 'Administrador';
+  document.getElementById('nombre-usuario-sidebar').textContent = nombreGuardado;
+  
+  document.getElementById('avatar-usuario-sidebar').textContent = nombreGuardado.substring(0, 2).toUpperCase();
+
+  cargarCategorias();
+  cargarTallesYColores();
+  navegarA('catalogo');
+});
+
+// ==========================================
+// SEGURIDAD Y SESIÓN
+// ==========================================
+async function cerrarSesion() {
+  try {
+    const res = await fetch('/api/v1/autenticacion/logout', { method: 'POST' });
+    if (res.ok) {
+      window.location.href = '/login';
+    }
+  } catch (error) {
+    mostrarToast('Error al cerrar sesión', 'ti-alert-triangle');
+  }
+}
+
+// ==========================================
+// CARGA INICIAL (Protegida)
 // ==========================================
 async function cargarCategorias() {
   try {
     const res = await fetch('/api/v1/admin/categorias');
+    // 🛡️ INTERCEPTOR: Si no hay token, lo mandamos al login al instante
+    if (res.status === 401 || res.status === 403) return window.location.href = '/login';
+    
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     categoriasMemoria = await res.json();
   } catch (error) {
@@ -83,6 +138,10 @@ async function cargarTallesYColores() {
       fetch('/api/v1/admin/talles'),
       fetch('/api/v1/admin/colores'),
     ]);
+    
+    // 🛡️ INTERCEPTOR MÚLTIPLE
+    if (resTalles.status === 401 || resColores.status === 401) return window.location.href = '/login';
+
     tallesMemoria = resTalles.ok ? await resTalles.json() : [];
     coloresMemoria = resColores.ok ? await resColores.json() : [];
   } catch (error) {
@@ -109,6 +168,10 @@ async function cargarCatalogoDesdeBD() {
 
   try {
     const res = await fetch('/api/v1/admin/productos');
+    
+    // 🛡️ INTERCEPTOR DEL CATÁLOGO
+    if (res.status === 401 || res.status === 403) return window.location.href = '/login';
+
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (data.mensaje) throw new Error(data.mensaje);
