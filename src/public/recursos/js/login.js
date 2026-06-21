@@ -40,10 +40,17 @@ async function manejarSubmit(evento) {
         const respuesta = await fetch('/api/v1/autenticacion/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include', // necesario para que el navegador guarde la cookie HttpOnly
+            credentials: 'include', 
             body: JSON.stringify({ email, password })
         })
 
+        // Si el backend ordenó una redirección (res.redirect)
+        if (respuesta.redirected) {
+            window.location.href = respuesta.url // Vamos hacia donde el backend mandó
+            return
+        }
+
+        // Si no hubo redirección, significa que falló y nos mandó el JSON con el error 401
         const datos = await respuesta.json()
 
         if (!respuesta.ok) {
@@ -51,10 +58,6 @@ async function manejarSubmit(evento) {
             establecerCargando(false)
             return
         }
-
-        // Login exitoso: la cookie ya quedó guardada por el servidor.
-        // Redirigimos al panel de administración.
-        window.location.href = '/admin'
 
     } catch (error) {
         console.error('Error de red en login:', error)

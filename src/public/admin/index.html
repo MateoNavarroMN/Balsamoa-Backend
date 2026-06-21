@@ -48,14 +48,27 @@
           <i class="ti ti-mail"></i><span>Newsletter</span>
         </div> -->
       </nav>
+      <a class="nav-item" href="/" target="_blank" style="text-decoration: none;">
+        <i class="ti ti-external-link"></i><span>Ver Tienda Pública</span>
+      </a>
       <div class="sidebar-footer">
-        <div class="user-avatar">AD</div>
-        <div>
-          <div class="user-name" style="font-size: 12px;">Administrador</div>
+        <div class="user-avatar" id="avatar-usuario-sidebar">AD</div>
+        
+        <div style="flex: 1; overflow: hidden;">
+          <div class="user-name" id="nombre-usuario-sidebar" style="font-size: 13px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+            Cargando...
+          </div>
         </div>
-        <button class="btn-theme" onclick="alternarTema()" title="Cambiar tema">
-          <i class="ti ti-moon" id="icono-tema"></i>
-        </button>
+        
+        <div style="display: flex; gap: 6px; margin-left: auto;">
+          <button class="btn-theme" onclick="alternarTema()" title="Cambiar tema" style="margin-left: 0;">
+            <i class="ti ti-moon" id="icono-tema"></i>
+          </button>
+          
+          <button class="btn-theme" onclick="cerrarSesion()" title="Cerrar Sesión" style="margin-left: 0; color: var(--danger); border-color: rgba(190, 58, 46, .25);">
+            <i class="ti ti-logout"></i>
+          </button>
+        </div>
       </div>
     </aside>
 

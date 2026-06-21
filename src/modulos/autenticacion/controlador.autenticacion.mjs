@@ -48,11 +48,11 @@ export async function login(req, res) {
         maxAge: 8 * 60 * 60 * 1000 // 8 horas de duración
     })
 
+    // Guardamos el nombre en una cookie normal para que el panel lo pueda leer
+    res.cookie('usuario_nombre', usuario.nombre, { maxAge: 8 * 60 * 60 * 1000 })
+
     // Retornamos un 200 sin el token en el body
-    res.status(200).json({
-        mensaje: 'Login exitoso',
-        usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email }
-    })
+    res.redirect('/admin')
 }
 
 export async function logout(req, res) {
@@ -73,6 +73,7 @@ export async function logout(req, res) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict'
     })
+    res.clearCookie('usuario_nombre')
 
     res.status(200).json({ mensaje: 'Sesión cerrada exitosamente' })
 }
