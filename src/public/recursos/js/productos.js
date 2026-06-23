@@ -53,7 +53,7 @@ function crearTarjeta(producto) {
 
     return `
         <article>
-            <a href="./producto.html?id=${producto.id}">
+            <a href="./producto?id=${producto.id}">
                 <div class="imgWrap">
                     ${badgeHTML}
                     <img

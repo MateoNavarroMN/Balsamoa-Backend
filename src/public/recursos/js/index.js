@@ -47,7 +47,7 @@ function crearTarjetaDestacado(producto) {
 
     return `
         <article>
-            <a href="./producto.html?id=${producto.id}">
+            <a href="./producto?id=${producto.id}">
                 <div class="imgWrap">
                     ${badgeHTML}
                     <img
@@ -72,7 +72,7 @@ function mostrarSinDestacados() {
         <div class="sinResultados">
             <span class="sinResultadosIcono">✦</span>
             <p>No hay productos destacados en este momento.</p>
-            <a href="./productos.html" class="btnVerProductos" style="margin-top:12px">
+            <a href="./productos" class="btnVerProductos" style="margin-top:12px">
                 Ver catálogo completo
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2">
