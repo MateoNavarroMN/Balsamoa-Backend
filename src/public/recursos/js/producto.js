@@ -1,5 +1,5 @@
 const API_BASE    = '/api/v1/tienda/productos'
-const WS_NUMERO   = '549111111111'
+const WS_NUMERO   = '+5493518024116'
 
 // ── Parámetros de URL
 const params     = new URLSearchParams(window.location.search)
@@ -314,7 +314,7 @@ function renderizarRelacionados(todos, actual) {
         // 4. Maquetación exacta de la tarjeta
         return `
             <article>
-                <a href="./producto.html?id=${producto.id}">
+                <a href="./producto?id=${producto.id}">
                     <div class="imgWrap">
                         ${badgeHTML}
                         <img
