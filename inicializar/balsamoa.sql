@@ -331,13 +331,13 @@ SELECT setval('producto_imagenes_id_seq', COALESCE((SELECT MAX(id) FROM producto
 SELECT setval('variantes_id_seq', COALESCE((SELECT MAX(id) FROM variantes), 1));
 
 INSERT INTO roles (id, nombre, descripcion) 
-VALUES (1, 'Administrador', 'Acceso total al panel de control de Balsamoa')
+VALUES (1, 'Administrador', 'Acceso total al panel de control de Balsamoa');
 
 INSERT INTO usuarios (nombre, email, password_hash, rol_id, activo) 
 VALUES (
     'Admin Balsamoa', 
     'admin@balsamoa.com', 
-    '$2b$10$4J.A45VnpRgqspUxC6eza.GQ/YXf8qLEJaWpkgh1vFEJBfTEvwtKO', 
+    '$2b$10$4J.A45VnpRgqspUxC6eza.GQ/YXf8qLEJaWpkgh1vFEJBfTEvwtKO', -- admin123
     1,
     true
 );
