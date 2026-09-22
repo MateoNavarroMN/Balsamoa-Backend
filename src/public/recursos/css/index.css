@@ -1,5 +1,5 @@
 /* ============================================================
-   BALSAMOA — Index.CSS
+   BALSAMOA — Index.CSS (Estilo Urbano Seamless)
    Estilos exclusivos de la página de inicio (index.html)
    ============================================================ */
 
@@ -10,6 +10,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    background-color: var(--blanco);
 }
 
 /* ==============================
@@ -20,7 +21,7 @@
     width: 100%;
     height: 600px;
     overflow: hidden;
-    background-color: var(--azul-oscuro);
+    background-color: var(--negro-puro);
 }
 
 .carruselImagenes {
@@ -46,54 +47,58 @@
     align-items: flex-end;
     padding: 64px 80px;
     z-index: 5;
-    background: linear-gradient(to top, rgba(26, 26, 26, 0.55) 0%, transparent 55%);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
 }
 
 .carruselTexto {
-    max-width: 520px;
+    max-width: 600px;
 }
 
 .carruselEtiqueta {
     display: block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.22em;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--terracota-claro);
+    color: var(--blanco);
     margin-bottom: 14px;
+    opacity: 0.8;
 }
 
 .carruselTexto h2 {
     font-family: var(--fuente-display);
     font-size: clamp(42px, 5.5vw, 68px);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--blanco);
     line-height: 1.08;
     margin-bottom: 32px;
+    text-transform: uppercase;
 }
 
 .carruselTexto h2 em {
     font-style: italic;
-    color: var(--terracota-claro);
+    color: var(--blanco);
+    opacity: 0.9;
 }
 
 .btnVerProductos {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 15px 36px;
-    background-color: var(--terracota);
-    color: var(--blanco);
+    padding: 16px 36px;
+    background-color: var(--blanco);
+    color: var(--negro-puro);
     text-decoration: none;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 700;
+    text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-radius: var(--radio);
+    border-radius: 4px;
     transition: background-color var(--transition), transform var(--transition);
 }
 
 .btnVerProductos:hover {
-    background-color: var(--terracota-claro);
+    background-color: #E5E5E5;
     transform: translateY(-2px);
 }
 
@@ -102,8 +107,8 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(245, 240, 232, 0.12);
-    border: 1px solid rgba(245, 240, 232, 0.25);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: var(--blanco);
     width: 46px;
     height: 46px;
@@ -118,17 +123,11 @@
 }
 
 .carruselBoton:hover {
-    background-color: rgba(245, 240, 232, 0.28);
-    border-color: rgba(245, 240, 232, 0.5);
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
-.carruselBoton.anterior {
-    left: 28px;
-}
-
-.carruselBoton.siguiente {
-    right: 28px;
-}
+.carruselBoton.anterior { left: 28px; }
+.carruselBoton.siguiente { right: 28px; }
 
 /* Indicadores */
 .carruselIndicadores {
@@ -141,66 +140,19 @@
 }
 
 .indicador {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background-color: rgba(245, 240, 232, 0.35);
-    border: 1px solid rgba(245, 240, 232, 0.55);
+    background-color: rgba(255, 255, 255, 0.35);
+    border: 1px solid transparent;
     cursor: pointer;
     transition: all var(--transition);
 }
 
 .indicador.activo {
-    background-color: var(--crema);
-    width: 26px;
-    border-radius: 3px;
-    border-color: var(--crema);
-}
-
-.indicador:hover {
-    background-color: rgba(245, 240, 232, 0.7);
-}
-
-/* ==============================
-   SEPARADOR MARCA (ticker)
-================================ */
-.separadorMarca {
-    background-color: var(--azul);
-    color: var(--crema);
-    padding: 13px 0;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    overflow: hidden;
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    user-select: none;
-}
-
-.separadorContenido {
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    padding-right: 32px;
-    animation: deslizarTicker 15s linear infinite;
-}
-
-@keyframes deslizarTicker {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-.separadorPunto {
-    color: var(--terracota-claro);
-    flex-shrink: 0;
+    background-color: var(--blanco);
+    width: 32px;
+    border-radius: 4px;
 }
 
 /* ==============================
@@ -211,6 +163,7 @@
     width: 100%;
     margin: 0 auto;
     padding: 80px 40px 64px;
+    background-color: var(--blanco);
 }
 
 .seccionEncabezado {
@@ -224,9 +177,10 @@
 
 .seccionEncabezado h1 {
     font-family: var(--fuente-display);
-    font-size: clamp(28px, 3.5vw, 40px);
-    font-weight: 600;
-    color: var(--azul);
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 700;
+    color: var(--negro-puro);
+    text-transform: uppercase;
     line-height: 1.15;
     text-align: left;
     padding: 0;
@@ -234,53 +188,61 @@
 
 .verTodoLink {
     font-size: 13.5px;
-    font-weight: 500;
-    color: var(--terracota);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--negro-puro);
     text-decoration: none;
     letter-spacing: 0.04em;
     padding-bottom: 3px;
-    border-bottom: 1px solid currentColor;
+    border-bottom: 2px solid var(--negro-puro);
     white-space: nowrap;
     margin-bottom: 6px;
-    transition: color var(--transition);
+    transition: opacity var(--transition);
 }
 
 .verTodoLink:hover {
-    color: var(--azul);
+    opacity: 0.6;
 }
 
+/* ── GRILLA SEAMLESS (Idéntica a productos.css) ── */
 .productosGrilla {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px 24px;
 }
 
 .productosGrilla article {
-    background-color: var(--blanco);
-    border-radius: var(--radio-lg);
+    background-color: transparent;
+    border-radius: var(--radio-lg, 12px);
     overflow: hidden;
-    box-shadow: var(--sombra);
-    transition: transform var(--transition), box-shadow var(--transition);
+    box-shadow: none; /* Sin sombra */
+    transition: transform 0.3s ease;
     cursor: pointer;
-}
-
-.productosGrilla article:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--sombra-hover);
-}
-
-.productosGrilla a {
-    color: var(--negro);
-    text-decoration: none;
+    position: relative;
     display: flex;
     flex-direction: column;
 }
 
+.productosGrilla article:hover {
+    transform: translateY(-4px);
+    box-shadow: none;
+}
+
+.productosGrilla a {
+    color: var(--negro-puro);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .productosGrilla .imgWrap {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 4/5; /* Aspecto más estilizado */
     overflow: hidden;
-    background-color: var(--crema-oscuro);
+    background-color: var(--gris-fondo); /* Se funde con la card */
+    border-radius: var(--radio-lg, 12px);
+    overflow: hidden;
 }
 
 .productosGrilla a img {
@@ -291,36 +253,64 @@
 }
 
 .productosGrilla article:hover img {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 .productosGrilla .cardInfo {
-    padding: 18px 20px 22px;
+    padding: 16px 4px 8px;
+    background-color: transparent; /* Sin recuadro blanco */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
 }
 
 .productosGrilla a h3 {
     font-family: var(--fuente-display);
-    font-size: 17px;
-    font-weight: 400;
-    color: var(--negro);
-    line-height: 1.35;
-    margin-bottom: 6px;
+    font-size: 16.5px;
+    font-weight: 500;
+    text-transform: none;
+    color: var(--negro-puro);
+    margin: 0;
 }
 
 .productosGrilla a p {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--terracota);
+    margin: 0;
 }
 
 /* ==============================
-   BANNER VALORES
+   TALLES EN TARJETAS
+================================ */
+.cardTalles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.talleChip {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--negro-puro);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    padding: 2px 8px;
+    background-color: transparent;
+}
+
+/* ==============================
+   BANNER VALORES (Clean minimalista)
 ================================ */
 .bannerValores {
     background-color: var(--azul);
     display: flex;
     align-items: stretch;
     justify-content: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .valorItem {
@@ -328,12 +318,12 @@
     max-width: 400px;
     padding: 60px 48px;
     text-align: center;
-    color: var(--crema);
+    color: var(--negro-puro);
 }
 
 .valorIcono {
-    font-size: 30px;
-    color: var(--terracota-claro);
+    font-size: 32px;
+    color: var(--terracota);
     margin-bottom: 22px;
     display: block;
     line-height: 1;
@@ -342,14 +332,15 @@
 .valorItem h3 {
     font-family: var(--fuente-display);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
     margin-bottom: 12px;
-    color: var(--crema);
+    color: var(--blanco);
 }
 
 .valorItem p {
     font-size: 14px;
-    color: rgba(245, 240, 232, 0.65);
+    color: var(--blanco);
     line-height: 1.75;
     max-width: 260px;
     margin: 0 auto;
@@ -357,7 +348,7 @@
 
 .valorSeparador {
     width: 1px;
-    background-color: rgba(245, 240, 232, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
     margin: 40px 0;
     flex-shrink: 0;
 }
@@ -366,39 +357,13 @@
    NEWSLETTER
 ================================ */
 .newsletter {
-    background-color: var(--crema-oscuro);
+    background-color: var(--blanco);
     padding: 96px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-}
-
-/* Decoración de fondo */
-.newsletter::before {
-    content: '';
-    position: absolute;
-    width: 480px;
-    height: 480px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(196, 112, 58, 0.1) 0%, transparent 65%);
-    right: -80px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-.newsletter::after {
-    content: '';
-    position: absolute;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(44, 74, 94, 0.07) 0%, transparent 65%);
-    left: -60px;
-    bottom: -80px;
-    pointer-events: none;
 }
 
 .newsletterContenido {
@@ -411,20 +376,20 @@
 .newsletterContenido h2 {
     font-family: var(--fuente-display);
     font-size: clamp(32px, 4vw, 50px);
-    font-weight: 600;
-    color: var(--azul);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--negro-puro);
     line-height: 1.12;
     margin-bottom: 16px;
 }
 
 .newsletterContenido h2 em {
     font-style: italic;
-    color: var(--terracota);
 }
 
 .newsletterSub {
     font-size: 15px;
-    color: var(--gris);
+    color: rgba(0, 0, 0, 0.6);
     margin-bottom: 40px;
     line-height: 1.65;
 }
@@ -439,33 +404,33 @@
 .newsletterForm input {
     flex: 1;
     padding: 14px 20px;
-    border: 1.5px solid rgba(44, 74, 94, 0.18);
-    border-radius: var(--radio);
-    font-size: 15px;
+    border: 1px solid var(--negro-puro);
+    border-radius: 4px;
+    font-size: 14px;
     font-family: var(--fuente-cuerpo);
-    background-color: var(--blanco);
-    color: var(--negro);
+    background-color: transparent;
+    color: var(--negro-puro);
     outline: none;
-    transition: border-color var(--transition), box-shadow var(--transition);
+    transition: all var(--transition);
 }
 
 .newsletterForm input:focus {
-    border-color: var(--azul);
-    box-shadow: 0 0 0 3px rgba(44, 74, 94, 0.1);
+    box-shadow: 0 0 0 1px var(--negro-puro);
 }
 
 .newsletterForm input::placeholder {
-    color: var(--gris-claro);
+    color: rgba(0, 0, 0, 0.4);
 }
 
 .newsletterForm button {
     padding: 14px 28px;
-    background-color: var(--azul);
-    color: var(--crema);
+    background-color: var(--negro-puro);
+    color: var(--blanco);
     border: none;
-    border-radius: var(--radio);
+    border-radius: 4px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 700;
+    text-transform: uppercase;
     font-family: var(--fuente-cuerpo);
     letter-spacing: 0.04em;
     cursor: pointer;
@@ -474,114 +439,43 @@
 }
 
 .newsletterForm button:hover {
-    background-color: var(--azul-oscuro);
+    background-color: #333;
 }
 
 /* ==============================
    RESPONSIVE INDEX
 ================================ */
 @media (max-width: 1024px) {
-    .carruselOverlay {
-        padding: 48px 48px;
-    }
-
-    .carruselIndicadores {
-        right: 48px;
-    }
-
-    .seccionDestacados {
-        padding: 64px 32px 48px;
-    }
+    .carruselOverlay { padding: 48px 48px; }
+    .carruselIndicadores { right: 48px; }
+    .seccionDestacados { padding: 64px 32px 48px; }
 }
 
 @media (max-width: 768px) {
-    .contenedorCarrusel {
-        height: 460px;
-    }
-
-    .carruselOverlay {
-        padding: 36px 28px;
-    }
-
-    .carruselIndicadores {
-        right: 28px;
-        bottom: 20px;
-    }
-
-    .carruselBoton {
-        width: 38px;
-        height: 38px;
-    }
-
-    .carruselBoton.anterior {
-        left: 14px;
-    }
-
-    .carruselBoton.siguiente {
-        right: 14px;
-    }
-
-    .separadorMarca {
-        gap: 22px;
-        font-size: 9.5px;
-        letter-spacing: 0.15em;
-    }
-
-    .seccionDestacados {
-        padding: 52px 20px 40px;
-    }
-
-    .seccionEncabezado {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-
-    .productosGrilla {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .bannerValores {
-        flex-direction: column;
-    }
-
-    .valorSeparador {
-        width: 48px;
-        height: 1px;
-        margin: 0 auto;
-    }
-
-    .valorItem {
-        padding: 44px 28px;
-        max-width: 100%;
-    }
-
-    .newsletter {
-        padding: 64px 20px;
-    }
-
-    .newsletterForm {
-        flex-direction: column;
-    }
-
-    .newsletterForm input,
-    .newsletterForm button {
-        width: 100%;
-    }
+    .contenedorCarrusel { height: 460px; }
+    .carruselOverlay { padding: 36px 28px; }
+    .carruselIndicadores { right: 28px; bottom: 20px; }
+    .carruselBoton { width: 38px; height: 38px; }
+    .carruselBoton.anterior { left: 14px; }
+    .carruselBoton.siguiente { right: 14px; }
+    
+    .seccionDestacados { padding: 52px 20px 40px; }
+    .seccionEncabezado { flex-direction: column; align-items: flex-start; gap: 12px; }
+    
+    .productosGrilla { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    
+    .bannerValores { flex-direction: column; }
+    .valorSeparador { width: 48px; height: 1px; margin: 0 auto; background-color: rgba(0,0,0,0.1); }
+    .valorItem { padding: 44px 28px; max-width: 100%; }
+    
+    .newsletter { padding: 64px 20px; }
+    .newsletterForm { flex-direction: column; }
+    .newsletterForm input, .newsletterForm button { width: 100%; }
 }
 
 @media (max-width: 480px) {
-    .contenedorCarrusel {
-        height: 380px;
-    }
-
-    .carruselTexto h2 {
-        font-size: 34px;
-    }
-
-    .btnVerProductos {
-        padding: 13px 28px;
-        font-size: 13px;
-    }
+    .contenedorCarrusel { height: 380px; }
+    .carruselTexto h2 { font-size: 34px; }
+    .btnVerProductos { padding: 13px 28px; font-size: 13px; }
+    .productosGrilla { grid-template-columns: 1fr; }
 }
