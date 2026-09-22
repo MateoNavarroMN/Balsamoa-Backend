@@ -298,7 +298,22 @@
           </div>
 
           <!-- ── SECCIÓN: Colores ── -->
+          <!-- <div class="modal-seccion-titulo" style="margin-top:20px;">Colores disponibles</div>
+          <div id="prod-colores-chips" class="chips-container">
+            <span style="color:var(--txt-3); font-size:12px;"><i class="ti ti-loader"></i> Cargando...</span>
+          </div> -->
+
+          <!-- ── SECCIÓN: Colores ── -->
           <div class="modal-seccion-titulo" style="margin-top:20px;">Colores disponibles</div>
+          
+          <div style="display: flex; gap: 10px; margin-bottom: 14px; align-items: center;">
+              <input type="color" id="nuevo-color-hex" value="#000000" style="width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; padding: 0; background: none;">
+              <input type="text" id="nuevo-color-nombre" class="form-control" placeholder="Nombre (Ej: Rojo)" style="max-width: 180px;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="agregarColorPersonalizado()">
+                  <i class="ti ti-plus"></i> Agregar
+              </button>
+          </div>
+
           <div id="prod-colores-chips" class="chips-container">
             <span style="color:var(--txt-3); font-size:12px;"><i class="ti ti-loader"></i> Cargando...</span>
           </div>

@@ -129,27 +129,28 @@ a {
 .contenidoEncPag {
     max-width: var(--max-ancho);
     margin: 0 auto;
-    padding: 5px 40px;
+    padding: 10px 40px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Coloca logo y menú en la misma línea */
     align-items: center;
+    justify-content: space-between; /* Empuja el logo a la izquierda y menú a la derecha */
 }
 
 .headerTop {
     display: flex;
-    justify-content: center;
-    width: 100%;
+    align-items: center; 
 }
 
 .logoLink {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Pone el ícono al lado de la palabra Balsamoa */
     align-items: center;
+    gap: 12px;
     text-decoration: none;
 }
 
 .logoLink img {
-    width: 50px;
+    width: 40px; /* Ícono un poco más chico para que balancee bien */
     height: auto;
 }
 
@@ -163,9 +164,8 @@ a {
 }
 
 #id_menuNav {
-    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end; /* Ancla los links a la derecha */
 }
 
 #id_menuNav a {
@@ -188,7 +188,6 @@ a {
 #id_menuNav a:hover {
     color: var(--terracota);
 }
-
 /* ==============================
    MENÚ HAMBURGUESA (mobile)
 ================================ */
@@ -236,6 +235,53 @@ a {
 
 .menuOverlay.active {
     display: block;
+}
+
+/* ==============================
+   ENCABEZADO DE PÁGINA (Unificado)
+================================ */
+.paginaHeader {
+    background-color: var(--azul);
+    padding: 32px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    
+    width: 100%;
+    max-width: var(--max-ancho); 
+    margin: 32px auto 0;
+    border-radius: var(--radio-lg);
+}
+
+.paginaHeader::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 60%, rgba(196, 112, 58, 0.15) 0%, transparent 55%);
+    pointer-events: none;
+}
+
+.paginaHeader .seccionEtiqueta {
+    color: var(--terracota-claro);
+    margin-bottom: 10px;
+    position: relative;
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.paginaHeader h1 {
+    font-family: var(--fuente-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    color: var(--crema);
+    line-height: 1.1;
+    padding: 0;
+    text-align: center;
+    position: relative;
 }
 
 /* ==============================
@@ -544,6 +590,114 @@ main {
 }
 
 /* ==============================
+   GRILLA DE PRODUCTOS (UNIFICADA)
+================================ */
+/* .productosGrilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px 24px;
+    justify-content: center;
+} */
+
+.productosGrilla {
+    display: grid;
+    /* auto-fit elimina columnas vacías; 320px pone un tope al ancho de la tarjeta */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+    justify-content: center;
+    gap: 32px 24px;
+}
+
+.productosGrilla article {
+    background-color: transparent;
+    border-radius: var(--radio-lg);
+    overflow: hidden;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.productosGrilla article:hover {
+    transform: translateY(-4px);
+    box-shadow: none;
+}
+
+.productosGrilla a {
+    color: var(--negro-puro);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.productosGrilla .imgWrap {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    background-color: var(--gris-fondo);
+    border-radius: var(--radio-lg);
+}
+
+.productosGrilla a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.55s ease;
+}
+
+.productosGrilla article:hover img {
+    transform: scale(1.03);
+}
+
+.productosGrilla .cardInfo {
+    padding: 16px 4px 8px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+}
+
+.productosGrilla a h3 {
+    font-family: var(--fuente-display);
+    font-size: 16.5px;
+    font-weight: 500;
+    text-transform: none;
+    color: var(--negro-puro);
+    margin: 0;
+    line-height: 1.35;
+}
+
+.productosGrilla a p {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--terracota);
+    margin: 0;
+}
+
+/* ==============================
+   TALLES EN TARJETAS
+================================ */
+.cardTalles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.talleChip {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--negro-puro);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    padding: 2px 8px;
+    background-color: transparent;
+}
+
+/* ==============================
    RESPONSIVE GLOBAL
 ================================ */
 @media (max-width: 900px) {
@@ -631,6 +785,17 @@ main {
         border-radius: 0;
     }
 
+    .paginaHeader {
+        width: auto;
+        padding: 40px 20px 36px;
+        margin: 20px 20px 0;
+    }
+
+    .productosGrilla {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
     .contenidoPiePag {
         flex-direction: column;
         align-items: center;
@@ -654,5 +819,11 @@ main {
     .whatsapp-flotante img {
         width: 28px;
         height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .productosGrilla {
+        grid-template-columns: 1fr;
     }
 }

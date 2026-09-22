@@ -4,14 +4,17 @@ const contenedorProds = document.getElementById('id_contenedorProductos')
 const contenedorPaginacion = document.getElementById('id_paginacion')
 const formFiltros = document.getElementById('id_formFiltros')
 const btnsOrden = document.querySelectorAll('.opcionOrden')
-const selectCategoria = document.getElementById('id_selectCategoria')
 const talleFiltroForm = document.getElementById('id_formFiltros')
+const contenedorCategorias = document.getElementById('id_selectCategoria')
+const textoCategoria = document.getElementById('js_textoCategoria')
+const menuCategorias = document.getElementById('id_menuCategorias')
 
 const PRODUCTOS_POR_PAGINA = 8
 
 let todosLosProductos = []   // catálogo completo en memoria
 let productosFiltrados = []   // resultado del filtro activo
 let paginaActual = 1
+let categoriaActual = ''
 let ordenActual = null // string del criterio de orden
 
 // ── Scroll-reveal del header
@@ -101,22 +104,35 @@ function mostrarErrorCatalogo() {
  * Extrae categorías únicas del catálogo y puebla el <select>.
  */
 function poblarCategorias(productos) {
-    if (!selectCategoria) return   // guard: si el HTML aún no tiene el select
+    if (!contenedorCategorias) return
 
     const categorias = [...new Set(
-        productos
-            .map(p => p.categoria)
-            .filter(Boolean)
+        productos.map(p => p.categoria).filter(Boolean)
     )].sort()
 
-    // Vaciamos opciones previas salvo la primera ("Todas")
-    selectCategoria.innerHTML = '<option value="">Todas las categorías</option>'
+    // Botón por defecto
+    contenedorCategorias.innerHTML = '<button type="button" class="opcionOrden" data-value="">Todas las categorías</button>'
 
+    // Creamos los botones por cada categoría
     categorias.forEach(cat => {
-        const opt = document.createElement('option')
-        opt.value = cat
-        opt.textContent = cat
-        selectCategoria.appendChild(opt)
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'opcionOrden'
+        btn.dataset.value = cat
+        btn.textContent = cat
+        contenedorCategorias.appendChild(btn)
+    })
+
+    // Escuchamos el evento click sobre los botones
+    const botonesCategoria = contenedorCategorias.querySelectorAll('.opcionOrden')
+    botonesCategoria.forEach(btn => {
+        btn.addEventListener('click', function () {
+            categoriaActual = this.dataset.value            // Guardamos el valor
+            textoCategoria.textContent = this.textContent   // Cambiamos el texto del menú
+            aplicarFiltros()                                // Filtramos
+            actualizarVistaProductos()                      // Recargamos la grilla
+            menuCategorias.removeAttribute('open')          // Cerramos el desplegable
+        })
     })
 }
 
@@ -146,7 +162,6 @@ function aplicarFiltros() {
     const talles = data.getAll('talle')
     const desde = parseFloat(data.get('precio-desde')) || 0
     const hasta = parseFloat(data.get('precio-hasta')) || Infinity
-    const catSel = selectCategoria?.value ?? ''
 
     productosFiltrados = todosLosProductos.filter(p => {
         // Precio
@@ -154,7 +169,7 @@ function aplicarFiltros() {
         if (precio < desde || precio > hasta) return false
 
         // Categoría
-        if (catSel && p.categoria !== catSel) return false
+        if (categoriaActual && p.categoria !== categoriaActual) return false
 
         // Talle: el producto debe tener al menos uno de los talles
         // seleccionados con tieneStock === true
@@ -278,7 +293,8 @@ function generarNumeroPaginas(actual, total) {
 // ── Limpiar filtros (expuesto globalmente para el botón inline)
 function limpiarFiltros() {
     formFiltros.reset()
-    if (selectCategoria) selectCategoria.value = ''
+    categoriaActual = ''
+    if (textoCategoria) textoCategoria.textContent = 'Todas las categorías'
     ordenActual = null
     productosFiltrados = [...todosLosProductos]
     actualizarVistaProductos()
@@ -312,13 +328,6 @@ btnsOrden.forEach(btn => {
         document.getElementById('id_menuOrdenamientos').removeAttribute('open')
     })
 })
-
-if (selectCategoria) {
-    selectCategoria.addEventListener('change', () => {
-        aplicarFiltros()
-        actualizarVistaProductos()
-    })
-}
 
 // ── Carga inicial
 async function iniciarPagina() {

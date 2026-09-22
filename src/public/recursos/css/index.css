@@ -204,103 +204,6 @@
     opacity: 0.6;
 }
 
-/* ── GRILLA SEAMLESS (Idéntica a productos.css) ── */
-.productosGrilla {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 32px 24px;
-}
-
-.productosGrilla article {
-    background-color: transparent;
-    border-radius: var(--radio-lg, 12px);
-    overflow: hidden;
-    box-shadow: none; /* Sin sombra */
-    transition: transform 0.3s ease;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.productosGrilla article:hover {
-    transform: translateY(-4px);
-    box-shadow: none;
-}
-
-.productosGrilla a {
-    color: var(--negro-puro);
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.productosGrilla .imgWrap {
-    width: 100%;
-    aspect-ratio: 4/5; /* Aspecto más estilizado */
-    overflow: hidden;
-    background-color: var(--gris-fondo); /* Se funde con la card */
-    border-radius: var(--radio-lg, 12px);
-    overflow: hidden;
-}
-
-.productosGrilla a img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.55s ease;
-}
-
-.productosGrilla article:hover img {
-    transform: scale(1.03);
-}
-
-.productosGrilla .cardInfo {
-    padding: 16px 4px 8px;
-    background-color: transparent; /* Sin recuadro blanco */
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex-grow: 1;
-}
-
-.productosGrilla a h3 {
-    font-family: var(--fuente-display);
-    font-size: 16.5px;
-    font-weight: 500;
-    text-transform: none;
-    color: var(--negro-puro);
-    margin: 0;
-}
-
-.productosGrilla a p {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--terracota);
-    margin: 0;
-}
-
-/* ==============================
-   TALLES EN TARJETAS
-================================ */
-.cardTalles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-}
-
-.talleChip {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--negro-puro);
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    padding: 2px 8px;
-    background-color: transparent;
-}
-
 /* ==============================
    BANNER VALORES (Clean minimalista)
 ================================ */
@@ -461,9 +364,7 @@
     
     .seccionDestacados { padding: 52px 20px 40px; }
     .seccionEncabezado { flex-direction: column; align-items: flex-start; gap: 12px; }
-    
-    .productosGrilla { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    
+        
     .bannerValores { flex-direction: column; }
     .valorSeparador { width: 48px; height: 1px; margin: 0 auto; background-color: rgba(0,0,0,0.1); }
     .valorItem { padding: 44px 28px; max-width: 100%; }
@@ -477,5 +378,4 @@
     .contenedorCarrusel { height: 380px; }
     .carruselTexto h2 { font-size: 34px; }
     .btnVerProductos { padding: 13px 28px; font-size: 13px; }
-    .productosGrilla { grid-template-columns: 1fr; }
 }
