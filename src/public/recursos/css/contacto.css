@@ -126,7 +126,7 @@
 }
 
 .contactoCard:hover .contactoCardArrow {
-    color: var(--terracota);
+    color: var(--negro-puro);
     transform: translateX(4px);
 }
 
@@ -134,7 +134,7 @@
     padding: 20px;
     background-color: var(--crema-oscuro);
     border-radius: var(--radio-lg);
-    border-left: 3px solid var(--terracota);
+    border-left: 3px solid var(--negro-puro);
 }
 
 .contactoHorario p {
@@ -204,7 +204,7 @@
     font-family: var(--fuente-cuerpo);
     border: 1.5px solid var(--crema-oscuro);
     border-radius: var(--radio);
-    background-color: var(--crema);
+    background-color: var(--gris-fondo);
     color: var(--negro);
     outline: none;
     transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);

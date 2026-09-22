@@ -30,6 +30,9 @@
     --gris-claro: #A0A0A0;
     --blanco: #FFFFFF;
 
+    --gris-fondo: #E5E5E5;   
+    --negro-puro: #000000;   
+
     --fuente-display: 'Playfair Display', Georgia, serif;
     --fuente-cuerpo: 'DM Sans', system-ui, sans-serif;
 
@@ -48,7 +51,7 @@ html {
 }
 
 body {
-    background-color: var(--crema);
+    background-color: var(--blanco);
     color: var(--negro);
     font-family: var(--fuente-cuerpo);
     font-size: 16px;
@@ -72,7 +75,7 @@ a {
    BARRA DE ANUNCIO
 ================================ */
 .anuncioBarra {
-    background-color: var(--azul);
+    background-color: var(--negro-puro);
     color: var(--crema);
     font-size: 11.5px;
     font-weight: 500;
@@ -116,8 +119,8 @@ a {
 ================================ */
 .encabezadoPrincipal {
     width: 100%;
-    background-color: var(--crema);
-    border-bottom: 1px solid var(--crema-oscuro);
+    background-color: var(--gris-fondo);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -169,7 +172,7 @@ a {
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
-    color: var(--negro);
+    color: var(--negro-puro);
     letter-spacing: 0.05em;
     padding: 6px 6px;
     transition: color var(--transition);
@@ -205,7 +208,7 @@ a {
     display: block;
     width: 24px;
     height: 2px;
-    background-color: var(--negro);
+    background-color: var(--negro-puro);
     transition: var(--transition);
     transform-origin: center;
 }
@@ -248,8 +251,8 @@ main {
 ================================ */
 .piePagina {
     width: 100%;
-    background: var(--azul);
-    border-top: 1px solid var(--azul-oscuro);
+    background: var(--gris-fondo);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     padding: 40px 24px;
     flex-shrink: 0;
 }
@@ -292,13 +295,13 @@ main {
 .footerNombre {
     font-size: 14px;
     font-weight: 600;
-    color: var(--crema);
+    color: var(--negro-puro);
     letter-spacing: 0.05em;
 }
 
 .footerCopyright {
     font-size: 12px;
-    color: var(--azul-claro);
+    color: var(--negro-puro);
     margin-left: 4px;
 }
 
@@ -310,7 +313,7 @@ main {
 .footerLinks a {
     font-size: 13px;
     text-decoration: none;
-    color: var(--crema-oscuro);
+    color: var(--negro-puro);
     transition: color var(--transition);
 }
 
@@ -329,13 +332,13 @@ main {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(245, 240, 232, 0.15);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 20px;
     padding: 6px 14px;
     font-size: 11px;
     text-decoration: none;
-    color: var(--crema-oscuro);
+    color: var(--negro-puro);
     transition: all var(--transition);
 }
 
@@ -343,12 +346,13 @@ main {
     width: 14px;
     height: 14px;
     object-fit: contain;
+    filter: brightness(0);
 }
 
 .socialPill:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--crema);
-    color: var(--blanco);
+    background: rgba(0, 0, 0, 0.08);
+    border-color: var(--negro-puro);
+    color: var(--negro-puro);
     transform: translateY(-2px);
 }
 
@@ -457,8 +461,8 @@ main {
 }
 
 .badge--disponible {
-    background-color: rgba(44, 74, 94, 0.85);
-    color: #F5F0E8;
+    background-color: var(--terracota);
+    color: var(--blanco);
 }
 
 .badge--ultimas {
@@ -597,11 +601,11 @@ main {
         display: block;
         max-width: 290px;
         height: 100vh;
-        background-color: var(--crema);
+        background-color: var(--blanco);
         padding-top: 88px;
         transition: right 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         z-index: 99;
-        box-shadow: -8px 0 32px rgba(44, 74, 94, 0.12);
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
         border-left: 1px solid var(--crema-oscuro);
         overflow-y: auto;
     }
