@@ -1,32 +1,20 @@
 import * as modelo from "./modelo.productos.mjs"
-import path from "path"
-import { fileURLToPath } from "url"
-import fs from 'fs'
 import multer from "multer"
+import sharp from "sharp"
+import { createClient } from "@supabase/supabase-js"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// Configuración de Supabase Storage
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_KEY // Idealmente la Service Role Key para tener permisos de borrado
+const supabase = createClient(supabaseUrl, supabaseKey)
+const BUCKET_NAME = 'productos'
 
-// Configuración privada de Multer
-const CARPETA_IMAGENES = path.join(__dirname, '../../public/recursos/imagenes/productos')
-
-if (!fs.existsSync(CARPETA_IMAGENES)) {
-    fs.mkdirSync(CARPETA_IMAGENES, { recursive: true })
-}
-
-const storage = multer.diskStorage({
-    destination: (_req, _file, cb) => {
-        cb(null, CARPETA_IMAGENES)
-    },
-    filename: (_req, file, cb) => {
-        const nombreLimpio = file.originalname.replace(/\s+/g, '_')
-        cb(null, `${Date.now()}_${nombreLimpio}`)
-    }
-})
+// Configuración de Multer en Memoria (reemplaza diskStorage)
+const storage = multer.memoryStorage()
 
 const upload = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+    limits: { fileSize: 4 * 1024 * 1024 }, // Reducido a 2 MB para evitar cargas pesadas
     fileFilter: (_req, file, cb) => {
         const TIPOS_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
         if (TIPOS_PERMITIDOS.includes(file.mimetype)) {
@@ -35,7 +23,7 @@ const upload = multer({
             cb(new Error('TIPO_INVALIDO'))
         }
     }
-}).single('imagen') // Preparamos la función que espera el campo 'imagen'
+}).single('imagen')
 
 // ---> Admin (CRUD)
 
@@ -215,8 +203,8 @@ export async function actualizarProducto(req, res) {
 
     // Borrar del disco las imágenes eliminadas (luego de confirmar que la BD se actualizó)
     for (const img of imagenesABorrar) {
-        if (img.url && img.url.startsWith('/recursos/')) {
-            borrarArchivo(rutaPublicaADisco(img.url))
+        if (img.url) {
+            await borrarImagenSupabase(img.url)
         }
     }
 
@@ -255,8 +243,8 @@ export async function eliminarProducto(req, res) {
     // Borrar los archivos del disco (solo si la BD confirmó el DELETE)
     if (!imagenes.error && Array.isArray(imagenes)) {
         for (const img of imagenes) {
-            if (img.url && img.url.startsWith('/recursos/')) {
-                borrarArchivo(rutaPublicaADisco(img.url))
+            if (img.url) {
+                await borrarImagenSupabase(img.url)
             }
         }
     }
@@ -291,13 +279,10 @@ export async function desactivarProducto(req, res) {
 // ---> Gestión de imágenes
 // Recibe un archivo por multer, lo guarda, y devuelve la ruta publica
 export function subirImagen(req, res) {
-    // Ejecutamos Multer manualmente adentro de la ruta
-    upload(req, res, function (err) {
-        
-        // Manejo de Errores
+    upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
             if (err.code === 'LIMIT_FILE_SIZE') {
-                return res.status(400).json({ mensaje: 'El archivo supera el límite de 5 MB' })
+                return res.status(400).json({ mensaje: 'El archivo supera el límite de 2 MB' })
             }
             return res.status(400).json({ mensaje: `Error de carga: ${err.message}` })
         } else if (err) {
@@ -307,22 +292,48 @@ export function subirImagen(req, res) {
             return res.status(400).json({ mensaje: err.message })
         }
 
-        // Validación de archivo vacío
         if (!req.file) {
             return res.status(400).json({ mensaje: 'No se recibió ningún archivo' })
         }
 
-        // Respuesta Exitosa
-        const rutaPublica = '/recursos/imagenes/productos/' + req.file.filename
-        res.status(201).json({
-            mensaje: 'Imagen subida exitosamente',
-            url: rutaPublica,
-            filename: req.file.filename
-        })
+        try {
+            // 1. Optimizar imagen con Sharp
+            const nombreLimpio = req.file.originalname.replace(/\s+/g, '_').split('.')[0]
+            const nombreArchivo = `${Date.now()}_${nombreLimpio}.webp`
+
+            const bufferComprimido = await sharp(req.file.buffer)
+                .resize({ width: 800, height: 800, fit: 'inside', withoutEnlargement: true })
+                .webp({ quality: 80 })
+                .toBuffer()
+
+            // 2. Subir al Bucket de Supabase
+            const { error: uploadError } = await supabase.storage
+                .from(BUCKET_NAME)
+                .upload(nombreArchivo, bufferComprimido, {
+                    contentType: 'image/webp'
+                })
+
+            if (uploadError) throw uploadError
+
+            // 3. Obtener la URL Pública
+            const { data: urlData } = supabase.storage
+                .from(BUCKET_NAME)
+                .getPublicUrl(nombreArchivo)
+
+            res.status(201).json({
+                mensaje: 'Imagen subida exitosamente',
+                url: urlData.publicUrl,
+                filename: nombreArchivo
+            })
+
+        } catch (error) {
+            console.error("Error al subir a Supabase:", error)
+            res.status(500).json({ mensaje: 'Error interno al procesar o subir la imagen' })
+        }
     })
 }
 
-// Obtiene la URL guardada en BD, borra el archivo del disco y el registro.
+// Obtiene la URL guardada en BD, borra el archivo de Supabase y el registro.
 export async function eliminarImagen(req, res) {
     const id = Number(req.params.id)
     if (isNaN(id)) {
@@ -338,8 +349,9 @@ export async function eliminarImagen(req, res) {
         return res.status(500).json({ mensaje: 'Error al buscar la imagen' })
     }
 
-    if (imagen.url && imagen.url.startsWith('/recursos/')) {
-        borrarArchivo(rutaPublicaADisco(imagen.url))
+    // Usamos nuestra nueva función helper para borrarla del Bucket
+    if (imagen.url) {
+        await borrarImagenSupabase(imagen.url)
     }
 
     const resultado = await modelo.eliminarImagenPorId(id)
@@ -347,7 +359,29 @@ export async function eliminarImagen(req, res) {
         return res.status(500).json({ mensaje: 'Error al eliminar la imagen de la base de datos' })
     }
 
-    res.status(200).json({ mensaje: 'Imagen eliminada del disco y de la base de datos' })
+    res.status(200).json({ mensaje: 'Imagen eliminada de Supabase y de la base de datos' })
+}
+
+// Helper interno para borrar de Supabase
+async function borrarImagenSupabase(urlPublica) {
+    try {
+        if (!urlPublica) return
+
+        // Extraer el nombre del archivo de la URL
+        const urlObj = new URL(urlPublica)
+        const parts = urlObj.pathname.split('/')
+        const filename = parts[parts.length - 1]
+
+        const { error } = await supabase.storage
+            .from(BUCKET_NAME)
+            .remove([filename])
+
+        if (error) {
+            console.warn('No se pudo borrar el archivo en Supabase:', filename, error.message)
+        }
+    } catch (err) {
+        console.warn('Error al intentar borrar URL:', urlPublica, err.message)
+    }
 }
 
 // ---> Publicos (Lectura)
