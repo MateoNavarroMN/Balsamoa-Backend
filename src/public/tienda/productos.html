@@ -69,9 +69,13 @@
         </section>
 
         <section class="barraControl">
-            <select id="id_selectCategoria" class="selectCategoria" aria-label="Filtrar por categoría">
-                <option value="">Todas las categorías</option>
-            </select>
+            <details id="id_menuCategorias" class="menuColapsable">
+                <summary class="botonDesplegable" id="js_textoCategoria">Todas las categorías</summary>
+                <div class="contenidoOrdenar" id="id_selectCategoria">
+                    <button type="button" class="opcionOrden" data-value="">Todas las categorías</button>
+                    <!-- Tu JavaScript inyectará las otras categorías aquí abajo -->
+                </div>
+            </details>
 
             <details id="id_menuFiltros" class="menuColapsable">
                 <summary class="botonDesplegable">Filtrar por</summary>

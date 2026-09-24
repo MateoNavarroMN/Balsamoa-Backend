@@ -4,42 +4,6 @@
    ============================================================ */
 
 /* ==============================
-   ENCABEZADO DE PÁGINA
-================================ */
-.paginaHeader {
-    background-color: var(--azul);
-    padding: 56px 40px 52px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.paginaHeader::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 60% 40%, rgba(196, 112, 58, 0.18) 0%, transparent 55%);
-    pointer-events: none;
-}
-
-.paginaHeader .seccionEtiqueta {
-    color: var(--terracota-claro);
-    margin-bottom: 10px;
-    position: relative;
-}
-
-.paginaHeader h1 {
-    font-family: var(--fuente-display);
-    font-size: clamp(36px, 5vw, 56px);
-    font-weight: 600;
-    color: var(--crema);
-    line-height: 1.1;
-    padding: 0;
-    text-align: center;
-    position: relative;
-}
-
-/* ==============================
    LAYOUT CONTACTO
 ================================ */
 .contactoLayout {
@@ -262,9 +226,6 @@
 }
 
 @media (max-width: 768px) {
-    .paginaHeader {
-        padding: 40px 20px 36px;
-    }
 
     .contactoLayout {
         padding: 44px 20px 56px;

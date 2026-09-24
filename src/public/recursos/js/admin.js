@@ -143,7 +143,13 @@ async function cargarTallesYColores() {
     if (resTalles.status === 401 || resColores.status === 401) return window.location.href = '/login';
 
     tallesMemoria = resTalles.ok ? await resTalles.json() : [];
-    coloresMemoria = resColores.ok ? await resColores.json() : [];
+    let coloresBackend = resColores.ok ? await resColores.json() : [];
+    
+    // Filtramos para dejar solo Blanco y Negro por defecto
+    coloresMemoria = coloresBackend.filter(c => 
+        c.nombre.toLowerCase().includes('blanco') || 
+        c.nombre.toLowerCase().includes('negro')
+    );
   } catch (error) {
     console.error('Error al cargar talles/colores:', error);
   }
@@ -224,7 +230,7 @@ function renderizarCatalogoHTML(productos) {
 
     const swatchesColores = (p.colores_hex || []).map(hex => {
       const borde = hex?.toUpperCase() === '#FFFFFF' ? 'border:1px solid var(--border-strong);' : '';
-      return `<span class="color-swatch" style="background:${hex};${borde}"></span>`;
+      return `<span class="color-swatch" title="${hex} (Clic para copiar)" onclick="copiarHex(event, '${hex}')" style="background:${hex};${borde}; cursor: pointer;"></span>`;
     }).join('');
 
     const colorStock = p.stock_total === 0 ? 'var(--danger)' : p.stock_total <= 4 ? 'var(--warning)' : 'var(--success)';
@@ -445,6 +451,64 @@ function toggleChip(el) {
 function obtenerChipsSeleccionados(contenedorId) {
   return [...document.querySelectorAll(`#${contenedorId} .chip.chip-activo`)]
     .map(el => Number(el.dataset.id));
+}
+
+async function agregarColorPersonalizado() {
+    const hex = document.getElementById('nuevo-color-hex').value;
+    const nombre = document.getElementById('nuevo-color-nombre').value.trim();
+    
+    if (!nombre) {
+        mostrarToast('Ingresá un nombre para el color', 'ti-alert-triangle');
+        return;
+    }
+
+    // 1. Verificación rápida: ¿Ya está en la lista visible del panel?
+    const yaVisible = coloresMemoria.find(c => 
+        c.nombre.toLowerCase() === nombre.toLowerCase() || 
+        c.hex.toLowerCase() === hex.toLowerCase()
+    );
+
+    if (yaVisible) {
+        mostrarToast('Este color ya está disponible en la lista', 'ti-info-circle');
+        return;
+    }
+
+    try {
+        // 2. Consulta al backend (crea uno nuevo o recupera uno oculto)
+        const res = await fetch('/api/v1/admin/colores', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, hex })
+        });
+
+        if (!res.ok) throw new Error('No se pudo procesar el color');
+
+        const colorProcesado = await res.json(); 
+
+        // Lo agregamos a la memoria visual
+        coloresMemoria.push(colorProcesado);
+        
+        // Lo seleccionamos automáticamente
+        const seleccionados = obtenerChipsSeleccionados('prod-colores-chips');
+        seleccionados.push(colorProcesado.id);
+        
+        // Re-renderizamos la interfaz
+        renderizarChips('prod-colores-chips', coloresMemoria, seleccionados, 'color');
+        renderizarTablaStock(obtenerVariantesDesdeTabla());
+        
+        // Limpiamos el input
+        document.getElementById('nuevo-color-nombre').value = '';
+        
+        // Mensaje dinámico según si se creó o se recuperó
+        if (res.status === 200) {
+            mostrarToast('Color recuperado de la base de datos', 'ti-check');
+        } else {
+            mostrarToast('Nuevo color creado exitosamente', 'ti-palette');
+        }
+
+    } catch (error) {
+        mostrarToast(error.message, 'ti-alert-triangle');
+    }
 }
 
 // ==========================================
@@ -714,3 +778,17 @@ document.addEventListener('DOMContentLoaded', () => {
   cargarTallesYColores();
   navegarA('catalogo');
 });
+
+// ==========================================
+// PORTAPAPELES
+// ==========================================
+function copiarHex(evento, hex) {
+  // Evita que el clic en el color active otras acciones de la fila por accidente
+  evento.stopPropagation(); 
+  
+  navigator.clipboard.writeText(hex).then(() => {
+    mostrarToast(`Color ${hex} copiado`, 'ti-copy');
+  }).catch(() => {
+    mostrarToast('Error al copiar el color', 'ti-alert-triangle');
+  });
+}
